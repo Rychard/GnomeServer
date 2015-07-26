@@ -15,7 +15,9 @@ namespace GnomeServer.Models
 
     public class Gnome
     {
+        public uint ID { get; set; }
         public String Name { get; set; }
+        public String Title { get; set; }
         public GnomeStats Stats { get; set; }
         public GnomeLocation Location { get; set; }
         public GnomeBodyPartStatus[] BodyParts { get; set; }
@@ -25,7 +27,9 @@ namespace GnomeServer.Models
 
         public Gnome(Character gnome, Dictionary<string, SkillDef> skillDefinitions = null)
         {
-            Name = gnome.NameAndTitle();
+            ID = gnome.ID;
+            Name = gnome.Name();
+            Title = gnome.Title();
             Location = new GnomeLocation(gnome.Position);
             Stats = GetGnomeStats(gnome);
             BodyParts = GetBodyStatus(gnome);
