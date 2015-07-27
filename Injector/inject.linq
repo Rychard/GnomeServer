@@ -46,8 +46,17 @@ void Main()
     var nextInstruction = il.Create(Mono.Cecil.Cil.OpCodes.Call, moduleGnomoria.Import(methodHook));
     il.InsertBefore(ret, nextInstruction);
 
-    String outputDirectory = Path.GetDirectoryName(workingPath);
+    // Explicitly set the output folder.  For the time being, it's going to the desktop.
+    String outputDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+    
+    // Set the name of the outputted executable file.  
+    // To better indicate that this includes injected code, name it appropriately.
     String outputPath = Path.Combine(outputDirectory, "GnomoriaInjected.exe");
-
+    
+    // Write the modified assembly.
     assemblyGnomoria.Write(outputPath);
+    
+    // The location of the assembly may not be known to the user running the script.
+    // To more clearly indicate this, show them the location of the modified assembly.
+    Console.WriteLine("Assembly Written to {0}", outputPath);
 }
