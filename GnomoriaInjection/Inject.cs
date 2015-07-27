@@ -32,20 +32,7 @@ namespace GnomoriaInjection
                     }
                     catch (Exception ex)
                     {
-                        StringBuilder sb = new StringBuilder();
-                        sb.AppendLine(ex.ToString());
-
-                        var innerException = ex.InnerException;
-                        while (innerException != null)
-                        {
-                            sb.AppendLine(Environment.NewLine + innerException);
-                            innerException = innerException.InnerException;
-                        }
-
-                        var desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                        var errorLogFileName = "errorlog.txt";
-                        var errorLogPath = Path.Combine(desktop, errorLogFileName);
-                        File.WriteAllText(errorLogPath, sb.ToString());
+                        LogException(ex);
 
                         // It's important that we still throw an exception here.
                         // Exceptions thrown at this point are undoubtedly on the GnomanEmpire.Instance property.
@@ -54,6 +41,17 @@ namespace GnomoriaInjection
                     }
                 }
             }
+        }
+
+        private static void LogException(Exception ex)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(ex.ToString());
+
+            var desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            var errorLogFileName = "errorlog.txt";
+            var errorLogPath = Path.Combine(desktop, errorLogFileName);
+            File.WriteAllText(errorLogPath, sb.ToString());
         }
 
         private static void OnExiting(object sender, EventArgs args)
