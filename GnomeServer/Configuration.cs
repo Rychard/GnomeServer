@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Game;
 using Game.GUI.Controls;
 using Newtonsoft.Json;
 
@@ -22,10 +23,18 @@ namespace GnomeServer
 
         public static String GetUserDataPath()
         {
-            var myDocuments = Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
-            var myGames = Path.Combine(myDocuments, "My Games");
-            var gameFolder = Path.Combine(myGames, "Gnomoria");
-            return gameFolder;
+            try
+            {
+                String savePath = GnomanEmpire.SaveFolderPath();
+                return savePath;
+            }
+            catch (Exception)
+            {
+                var myDocuments = Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+                var myGames = Path.Combine(myDocuments, "My Games");
+                var gameFolder = Path.Combine(myGames, "Gnomoria");
+                return gameFolder;
+            }
         }
 
         private static String GetFilePath(String fileName)
