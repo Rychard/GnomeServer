@@ -1,0 +1,40 @@
+﻿<section>
+    <h1 style="display: inline-block">
+        <span data-bind="text: name"></span>
+        <small>Population: <span data-bind="text: gnomeSummary.Population"></span></small>
+    </h1>
+
+    <div data-bind="foreach: gnomeSummary.Gnomes">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h2>
+                        <span data-bind="text: Name"></span>
+                        <small><span data-bind="text: Title"></span></small>
+                        <!--<small><span class="text-right" data-bind="text: Location.Text"></span></small>-->
+                    </h2>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row" style="height: 100px; overflow-y: scroll">
+                    <div class="col-md-6">
+                        <div data-bind="foreach: BodyParts">
+                            <div>
+                                <span data-bind="text: BodyPart"></span>: <span data-bind="text: StatusText"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div data-bind="foreach: Skills">
+                            <div>
+                                <span data-bind="text: Name"></span>: <span data-bind="text: Skill"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
+            </div>
+        </div>
+
+    </div>
+</section>

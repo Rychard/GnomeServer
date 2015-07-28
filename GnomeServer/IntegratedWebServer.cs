@@ -170,9 +170,14 @@ namespace GnomeServer
             }
 
             // Get the request handler associated with the current request.
-            var handler = _requestHandlers.FirstOrDefault(obj => obj.ShouldHandle(request));
-            if (handler != null)
+            var handlers = _requestHandlers.Where(obj => obj.ShouldHandle(request)).ToArray();
+            if (handlers.Length > 1)
             {
+                LogMessage("Handler Resolution Error: Endpoint did not resolve to a single handler!");
+            }
+            else if (handlers.Length == 1)
+            {
+                var handler = handlers[0];
                 try
                 {
                     IResponseFormatter responseFormatterWriter = handler.Handle(request);

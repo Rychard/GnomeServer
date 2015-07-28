@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Game;
+using GnomeServer.Extensions;
 using GnomeServer.Routing;
 
 namespace GnomeServer.Controllers
@@ -28,7 +29,7 @@ namespace GnomeServer.Controllers
 
             List<TestResponse> testResponses = new List<TestResponse>();
 
-            var members = GnomanEmpire.Instance.World.AIDirector.PlayerFaction.Members;
+            var members = GnomanEmpire.Instance.GetGnomes();
             foreach (var characterKey in members)
             {
                 var character = characterKey.Value;

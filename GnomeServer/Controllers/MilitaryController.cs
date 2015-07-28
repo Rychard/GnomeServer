@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Game;
+using GnomeServer.Extensions;
 using GnomeServer.Models;
 using GnomeServer.Routing;
 
@@ -22,7 +23,7 @@ namespace GnomeServer.Controllers
         {
             var game = GnomanEmpire.Instance;
             var playerFaction = game.World.AIDirector.PlayerFaction;
-            var gnomes = playerFaction.Members.Select(obj => obj.Value);
+            var gnomes = game.GetGnomes().Select(obj => obj.Value);
             foreach (var gnome in gnomes)
             {
                 // Because we are potentially creating squads inside this loop, we should always refresh this collection on each iteration.

@@ -4,15 +4,18 @@ using System.Linq;
 using Game;
 using GameLibrary;
 using Microsoft.Xna.Framework;
+using TypeLite;
 
 namespace GnomeServer.Models
 {
+    [TsClass]
     public class GnomeSummary
     {
         public int Population { get; set; }
         public Gnome[] Gnomes { get; set; }
     }
 
+    [TsClass]
     public class Gnome
     {
         public uint ID { get; set; }
@@ -64,15 +67,23 @@ namespace GnomeServer.Models
 
         private static GnomeBodyPartStatus[] GetBodyStatus(Character gameGnome)
         {
-            var statuses = gameGnome.Body.BodySections.Select(bodyPart => new GnomeBodyPartStatus
+            var statuses = gameGnome.Body.BodySections.Select(GetBodyPartStatus).ToArray();
+            return statuses;
+        }
+
+        private static GnomeBodyPartStatus GetBodyPartStatus(BodySection bodyPart)
+        {
+            var flags = Enum.GetValues(typeof (BodySectionStatus)).Cast<BodySectionStatus>();
+            var statuses = flags.Where(flag => bodyPart.Status.HasFlag(flag)).Select(flag => Enum.GetName(typeof (BodyPartStatus), flag)).ToArray();
+            return new GnomeBodyPartStatus
             {
                 BodyPart = bodyPart.Name,
-                Status = bodyPart.Status.ToString(),
-            }).ToArray();
-            return statuses;
+                Statuses = statuses,
+            };
         }
     }
 
+    [TsClass]
     public class GnomeStats
     {
         public float Happiness { get; set; }
@@ -82,12 +93,14 @@ namespace GnomeServer.Models
         public float Thirst { get; set; }
     }
 
+    [TsClass]
     public class GnomeSkill
     {
         public String Name { get; set; }
         public int Skill { get; set; }
     }
 
+    [TsClass]
     public class GnomeLocation
     {
         public int X { get; set; }
@@ -104,9 +117,10 @@ namespace GnomeServer.Models
         }
     }
 
+    [TsClass]
     public class GnomeBodyPartStatus
     {
         public String BodyPart { get; set; }
-        public String Status { get; set; }
+        public String[] Statuses { get; set; }
     }
 }
