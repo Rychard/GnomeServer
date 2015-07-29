@@ -4,6 +4,8 @@ This is essentially a port/rewrite of an existing mod for [Cities: Skylines](htt
 
 That repository can be found at [Rychard/CityWebServer](https://github.com/Rychard/CityWebServer).
 
+![Screenshot](./Screenshot.png)
+
 ## Notice
 
 While Gnomoria *does* allow modding of the game, the scope of what can be modified is extremely limited, and as far as I can tell doesn't allow for the execution of arbitrary bits of code.  Consequently, the only way I was able to make this work was by modifying the game's executable.  
@@ -12,41 +14,50 @@ To perform such a modification, there exists a library ([Mono.Cecil](https://git
 
 # Installation
 
-1. Build the `GnomeServer` solution located in this repository.
-  - The projects rely on the presence of the game's assemblies under the `Assemblies` directory in the repository root.
-  - These assemblies cannot be included in the repository for obvious reasons, so just make sure the assembly references can be appropriately resolved at compile-time.
-  - The projects use some nuget packages, which should "*just work*" for most people.
+1. Locate your `Gnomoria` installation directory.
+    - Example: `C:\Program Files (x86)\Steam\SteamApps\Common\Gnomoria`
 
-2. After building the solution, take a look at the script for the code injection, as you'll probably need to modify some hard-coded paths.
-  - The code for the injector is currently provided as a linqpad script, though as far as I know there's nothing that precludes it from being copy/pasted into a standard C# Console Application.
-  
-3. Once the paths are configured properly in the injection script, running it will produce a *slightly* modified executable for the game.
-  - At the time of writing, this is verified to work on the latest `in-dev` release from Steam, which is `v0.9.18 RC30`.
-  - This *may* also work for the current `stable` version of the game on Steam (and perhaps the DRM-free version from Humble Bundle, which I also have, but haven't tested personally).
+2. Copy the following files **from** your `Gnomoria` installation directory **to** the `Assemblies` directory located in the root of this repository:
+    - `Gnomoria.exe`
+    - `gnomorialib.dll`
+    - `irrKlang.NET4.dll`
+    - `SevenZipSharp.dll`
 
-4. Gather the following assemblies, produced from the above steps:
-  - `GnomoriaInjection\bin\debug\GnomeServer.dll`
-  - `GnomoriaInjection\bin\debug\GnomoriaInjection.dll`
-  - `GnomoriaInjection\bin\debug\Newtonsoft.Json.dll`
-  - `%Desktop%\GnomoriaInjected.exe`
-  - `GnomoriaInjection\bin\debug\GnomeServer.pdb` (Optional, shows line-numbers for exceptions)
-  - `GnomoriaInjection\bin\debug\GnomoriaInjection.pdb` (Optional, shows line-numbers for exceptions)
+4. Build the `GnomeServer` solution located in this repository.
 
-5. Place those files in the Steam directory for Gnomoria.
-  - `<STEAM>/SteamApps/Common/Gnomoria`
+5. Copy the files below to your `Gnomoria` installation directory:
+  - `GnomoriaInjection\bin\x86\Debug\GnomeServer.dll`
+  - `GnomoriaInjection\bin\x86\Debug\GnomoriaInjection.dll`
+  - `GnomoriaInjection\bin\x86\Debug\Newtonsoft.Json.dll`
+  - `GnomoriaInjection\bin\x86\Debug\GnomeServer.pdb`
+  - `GnomoriaInjection\bin\x86\Debug\GnomoriaInjection.pdb`
 
-6. Double-Click the `GnomoriaInjected.exe` file to launch the game.
-  - Optionally, you can *backup* the original `Gnomoria.exe` and replace it with the modified version, but I don't do that myself.
+5. Download [LinqPad](http://www.linqpad.net/) and use it to run the `inject.linq` script located in the `Injector` directory.
+    - It's likely that you'll need to edit the first path in that script to point to your `Gnomoria` installation path.
+    - This script will create a file called `GnomoriaInjected.exe` in your `Gnomoria` installation path.
+    - At the time of writing, this is verified to work on the latest `in-dev` release from Steam, which is `v0.9.18 RC30`.
+    - This *may* also work for the current `stable` version of the game on Steam (and perhaps the DRM-free version from Humble Bundle, which I also own, but haven't tested personally).
+ 
+6. Double-click the `GnomoriaInjected.exe` file in your `Gnomoria` installation directory to start the game.
 
-7. By default, the game hosts a web server that listens for requests at [http://localhost:8081/](http://localhost:8081/)
-  - This address can be configured by editing the server's configuration.  
-      - Install the mod normally.
-      - Launch `GnomoriaInjected.exe` at least once.
-      - Close the game.
-      - Locate the `GnomeServer.json` file.  By default it is stored in `%UserProfile%\Documents\My Games\Gnomoria\`.
-        - Ideally it would defer to the game's logic for determining where to look; since this location is used to store saved games and is configurable via an `ini` file in the game's directory.
+### Advanced Server Configuration
+By default, the game hosts a web server that listens for requests at [http://localhost:8081/](http://localhost:8081/)
 
-![Screenshot](./Screenshot.png)
+This address can be configured by editing the server's configuration:
+- Install the mod normally.
+- Launch `GnomoriaInjected.exe` at least once.
+- Close the game.
+- Locate the `GnomeServer.json` file.  It is located in the same directory as your saved games.
+- Editing the file should be simple enough, but here's a quick sample to illustrate:
+```json
+[
+  {
+    "Key": "webServerHost1",
+    "Value": "http://<HostName>:<PortNumber>/",
+    "Type": "string"
+  }
+]
+```
 
 # Projects
 

@@ -1,0 +1,12 @@
+This directory must contain the following files:
+
+- Gnomoria.exe
+- gnomorialib.dll
+- irrKlang.NET4.dll
+- SevenZipSharp.dll
+
+These files can be found in your Gnomoria installation directory.
+
+Copy those files into this directory.
+
+(I personally prefer to create symbolic links, but copying them is the easier solution.)
