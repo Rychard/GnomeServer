@@ -10,23 +10,43 @@ export class GnomeSummary implements models.IGnomeSummary {
     }
 }
 
+class GnomeProfession implements GnomeServer.Models.IGnomeProfession {
+    Name: string;
+    Skills: string[];
+
+    constructor(obj: any) {
+        this.Name = obj.Name;
+        this.Skills = obj.Skills;
+    }
+}
+
 export class Gnome implements models.IGnome {
     ID: number;
     Name: string;
-    Title: string;
     Stats: GnomeServer.Models.IGnomeStats;
     Location: GnomeServer.Models.IGnomeLocation;
     BodyParts: GnomeServer.Models.IGnomeBodyPartStatus[];
     Skills: GnomeServer.Models.IGnomeSkill[];
+    Profession: GnomeServer.Models.IGnomeProfession;
+    ProfessionSkills: GnomeServer.Models.IGnomeSkill[];
 
     constructor(obj: any) {
         this.ID = obj.ID;
         this.Name = obj.Name;
-        this.Title = obj.Title;
         this.Stats = new GnomeStats(obj.Stats);
         this.Location = new GnomeLocation(obj.Location);
         this.BodyParts = obj.BodyParts.map((item: GnomeBodyPartStatus) => { return new GnomeBodyPartStatus(item); });
         this.Skills = GnomeSkill.SortBySkill(obj.Skills.map((item: GnomeSkill) => { return new GnomeSkill(item); }), true);
+        this.Profession = new GnomeProfession(obj.Profession);
+        this.ProfessionSkills = Gnome.GetProfessionSkills(this.Skills, this.Profession);
+    }
+
+    private static GetProfessionSkills(skills: GnomeServer.Models.IGnomeSkill[], profession: GnomeProfession): GnomeServer.Models.IGnomeSkill[] {
+        var professionSkills = skills.filter((value: GnomeSkill) => {
+            return profession.Skills.indexOf(value.Name) >= 0;
+        });
+
+        return GnomeSkill.SortBySkill(professionSkills, true);
     }
 }
 

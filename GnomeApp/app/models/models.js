@@ -7,16 +7,30 @@ define(["require", "exports"], function (require, exports) {
         return GnomeSummary;
     })();
     exports.GnomeSummary = GnomeSummary;
+    var GnomeProfession = (function () {
+        function GnomeProfession(obj) {
+            this.Name = obj.Name;
+            this.Skills = obj.Skills;
+        }
+        return GnomeProfession;
+    })();
     var Gnome = (function () {
         function Gnome(obj) {
             this.ID = obj.ID;
             this.Name = obj.Name;
-            this.Title = obj.Title;
             this.Stats = new GnomeStats(obj.Stats);
             this.Location = new GnomeLocation(obj.Location);
             this.BodyParts = obj.BodyParts.map(function (item) { return new GnomeBodyPartStatus(item); });
             this.Skills = GnomeSkill.SortBySkill(obj.Skills.map(function (item) { return new GnomeSkill(item); }), true);
+            this.Profession = new GnomeProfession(obj.Profession);
+            this.ProfessionSkills = Gnome.GetProfessionSkills(this.Skills, this.Profession);
         }
+        Gnome.GetProfessionSkills = function (skills, profession) {
+            var professionSkills = skills.filter(function (value) {
+                return profession.Skills.indexOf(value.Name) >= 0;
+            });
+            return GnomeSkill.SortBySkill(professionSkills, true);
+        };
         return Gnome;
     })();
     exports.Gnome = Gnome;

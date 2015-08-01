@@ -8,18 +8,18 @@
 /// <reference path="Enums.ts" />
 
 declare module GnomeServer.Models {
-	export interface IGnomeSummary {
+	interface IGnomeSummary {
 		Population: number;
 		Gnomes: GnomeServer.Models.IGnome[];
 	}
 	interface IGnome {
 		ID: number;
 		Name: string;
-		Title: string;
 		Stats: GnomeServer.Models.IGnomeStats;
 		Location: GnomeServer.Models.IGnomeLocation;
 		BodyParts: GnomeServer.Models.IGnomeBodyPartStatus[];
 		Skills: GnomeServer.Models.IGnomeSkill[];
+		Profession: GnomeServer.Models.IGnomeProfession;
 	}
 	interface IGnomeStats {
 		Happiness: number;
@@ -40,6 +40,10 @@ declare module GnomeServer.Models {
 	interface IGnomeSkill {
 		Name: string;
 		Skill: number;
+	}
+	interface IGnomeProfession {
+		Name: string;
+		Skills: string[];
 	}
 }
 

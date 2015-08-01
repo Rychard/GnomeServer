@@ -20,11 +20,11 @@ namespace GnomeServer.Models
     {
         public uint ID { get; set; }
         public String Name { get; set; }
-        public String Title { get; set; }
         public GnomeStats Stats { get; set; }
         public GnomeLocation Location { get; set; }
         public GnomeBodyPartStatus[] BodyParts { get; set; }
         public GnomeSkill[] Skills { get; set; }
+        public GnomeProfession Profession { get; set; }
 
         public Gnome() { }
 
@@ -32,11 +32,11 @@ namespace GnomeServer.Models
         {
             ID = gnome.ID;
             Name = gnome.Name();
-            Title = gnome.Title();
             Location = new GnomeLocation(gnome.Position);
             Stats = GetGnomeStats(gnome);
             BodyParts = GetBodyStatus(gnome);
             Skills = GetGnomeSkills(skillDefinitions, gnome);
+            this.Profession = new GnomeProfession(gnome.Mind.Profession);
         }
 
         private static GnomeStats GetGnomeStats(Character gnome)
@@ -80,6 +80,19 @@ namespace GnomeServer.Models
                 BodyPart = bodyPart.Name,
                 Statuses = statuses,
             };
+        }
+    }
+
+    [TsClass]
+    public class GnomeProfession
+    {
+        public String Name { get; set; }
+        public String[] Skills { get; set; }
+
+        public GnomeProfession(Profession profession)
+        {
+            Name = profession.Title;
+            Skills = profession.AllowedSkills.AllowedSkills.ToArray();
         }
     }
 
