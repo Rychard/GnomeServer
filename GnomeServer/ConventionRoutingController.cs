@@ -28,7 +28,8 @@ namespace GnomeServer
                     remaining = remaining.Substring(1);
                 }
 
-                var matches = _methodRoutes.Where(methodRoute => methodRoute.Key.StartsWith(remaining));
+                String method = request.HttpMethod;
+                var matches = _methodRoutes.Where(methodRoute => methodRoute.Key.StartsWith(String.Format("{0}:{1}", method, remaining)));
                 if (matches.Any())
                 {
                     return true;
