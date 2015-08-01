@@ -27,11 +27,16 @@
 
     <nav class="navbar-default navbar-side" role="navigation">
         <div class="sidebar-collapse">
-            <ul class="nav" id="main-menu" data-bind="foreach: router.navigationModel">
+            <ul class="nav" id="main-menu">
+                <!-- ko foreach: router.navigationModel -->
                 <li>
                     <a data-bind="css: { 'active-menu': isActive }, attr: { href: hash }">
                         <i data-bind="attr: { 'class': settings.icon }"></i><span data-bind="text: title"></span>
                     </a>
+                </li>
+                <!-- /ko -->
+                <li class="staticText">
+                    <div data-bind="widget: {kind: 'speed'}"></div>
                 </li>
             </ul>
         </div>

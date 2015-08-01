@@ -90,6 +90,16 @@ section {
     text-shadow: none;
 }
 
+.sidebar-collapse .nav > li.staticText {
+    padding: 15px 10px;
+    color: #fff;
+    background: transparent;
+    text-shadow: none;
+}
+
+.sidebar-collapse .nav > li.staticText:hover {
+    background-color: transparent !important;
+}
 .active-menu {
   background-color: #225081!important;
 }
@@ -102,90 +112,32 @@ table thead tr th {
     background-color: #F7F7F7;
 }
 
-
-/* Backup Display */
-
-ul.backup-display-container {
-    list-style: none;
-    padding: 0;
+.active-row {
+    background-color: #fafad2;
 }
 
-div.backup-display {
-    padding: 0;
-    clear: both;
-}
-
-.backup-display-title {
-    font-size: 14px;
-    font-weight: 500;
-    margin: 5px;
-}
-
-.backup-display-icon {
-    display: inline-block;
-    
-    text-align: center;
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
-    color: #225081;
-    opacity: 0.15;   
-}
-
-
-div.backup-display > ol {
-    display: block;
-    list-style: none;
-    padding: 0;
-    counter-reset: li;
-    margin: 0 !important;
-    /*overflow: hidden;*/
-}
-
-.backup-display-content:before {
-    content: "\f000";
-    font-family: FontAwesome;
-    font-style: normal;
-    font-weight: normal;
-    text-decoration: inherit;
-    /*--adjust as necessary--*/
-    color: #000;
-    font-size: 18px;
-    padding-right: 0.5em;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    
-}
-
-.backup-display-step-content {
-    z-index: 2;
-    position: absolute;
-    padding: 10px;
-    top: 0;
-    left: 0;
-}
-
-div.backup-display > ol > li {
-    box-sizing: border-box;
-    display: inline-block;
-    background-color: transparent;
-    border-right: 1px dotted #CCC;
-    padding: 10px;
-    position: relative;
-    height: 100%;
-}
-
-div.backup-display > ol > li:last-child {
-    border-right: none;
-}
-
-.backup-display-step-content > h2 {
-    font-size: 12px;
-    font-weight: 500;
-    margin: 5px 0;
-}
-
-.backup-display-step-content > span {
-    font-size: 12px;
+.test {
+    color: #2c77ba;
+    color: #58B3F0;                
+    color: #C6E2EE;
+    color: #1F98C7;
+    color: #78C1DD;
+    color: #000000;
+    color: #111111;
+    color: #222222;
+    color: #252525;
+    color: #333333;
+    color: #555555;
+    color: #666666;
+    color: #777777;
+    color: #999999;
+    color: #AAAAAA;
+    color: #BBBBBB;
+    color: #CCCCCC;
+    color: #DDDDDD;
+    color: #E8E8E8;
+    color: #EEEEEE;
+    color: #F5F5F5;
+    color: #F9F9F9;
+    color: #FFFFFF;
 }

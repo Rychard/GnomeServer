@@ -24,6 +24,7 @@
     <Content Include="app\home\index.html" />
     <Content Include="app\loading.html" />
     <Content Include="app\shell.html" />
+    <Content Include="app\widgets\speed\view.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -100,6 +101,7 @@
     <TypeScriptCompile Include="app\shell.ts" />
     <TypeScriptCompile Include="app\startup.ts" />
     <TypeScriptCompile Include="app\utils.ts" />
+    <TypeScriptCompile Include="app\widgets\speed\viewmodel.ts" />
     <TypeScriptCompile Include="Scripts\typings\durandal\durandal.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
