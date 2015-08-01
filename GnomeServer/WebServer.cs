@@ -6,6 +6,7 @@ namespace GnomeServer
 {
     public class WebServer
     {
+        private readonly Object Locker = new Object();
         private readonly HttpListener _listener = new HttpListener();
         private readonly Action<HttpListenerRequest, HttpListenerResponse> _responderMethod;
 
@@ -61,13 +62,17 @@ namespace GnomeServer
             {
                 if (ctx != null)
                 {
-                    var request = ctx.Request;
-                    var response = ctx.Response;
+                    // Service only a single request at a time.
+                    lock (Locker)
+                    {
+                        var request = ctx.Request;
+                        var response = ctx.Response;
 
-                    // Allow accessing pages from pages hosted from another local web-server, such as IIS, for instance.
-                    response.AddHeader("Access-Control-Allow-Origin", "http://localhost");
+                        // Allow accessing pages from pages hosted from another local web-server, such as IIS, for instance.
+                        response.AddHeader("Access-Control-Allow-Origin", "http://localhost");
 
-                    _responderMethod(request, response);
+                        _responderMethod(request, response);
+                    }
                 }
             }
             catch { } // Suppress any exceptions.
