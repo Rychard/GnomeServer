@@ -204,49 +204,6 @@ namespace GnomeServer
             ServiceFileRequest(wwwroot, request, response);
         }
 
-        private static void ServiceFileRequest(String wwwroot, HttpListenerRequest request, HttpListenerResponse response)
-        {
-            var relativePath = request.Url.AbsolutePath.Substring(1);
-            relativePath = relativePath.Replace("/", Path.DirectorySeparatorChar.ToString());
-            var absolutePath = Path.Combine(wwwroot, relativePath);
-
-            LogMessage(String.Format("ServiceFileRequest: {0} ({1})", request.Url, absolutePath));
-
-            if (File.Exists(absolutePath))
-            {
-                var extension = Path.GetExtension(absolutePath);
-                response.ContentType = Apache.GetMime(extension);
-                response.StatusCode = 200; // HTTP 200 - SUCCESS
-
-                // Open file, read bytes into buffer and write them to the output stream.
-                using (FileStream fileReader = File.OpenRead(absolutePath))
-                {
-                    byte[] buffer = new byte[4096];
-                    int read;
-                    while ((read = fileReader.Read(buffer, 0, buffer.Length)) > 0)
-                    {
-                        response.OutputStream.Write(buffer, 0, read);
-                    }
-                }
-            }
-            else
-            {
-                String body = String.Format("No resource is available at the specified filepath: {0}", absolutePath);
-
-                IResponseFormatter notFoundResponseFormatter = new PlainTextResponseFormatter(body, HttpStatusCode.NotFound);
-                notFoundResponseFormatter.WriteContent(response);
-            }
-        }
-
-        /// <summary>
-        /// Searches all the assemblies in the current AppDomain for class definitions that implement the <see cref="IRequestHandler"/> interface.  Those classes are instantiated and registered as request handlers.
-        /// </summary>
-        private void RegisterHandlers()
-        {
-            IEnumerable<Type> handlers = FindHandlersInLoadedAssemblies();
-            RegisterHandlers(handlers);
-        }
-
         private void RegisterHandlers(IEnumerable<Type> handlers)
         {
             if (handlers == null) { return; }
@@ -353,6 +310,15 @@ namespace GnomeServer
         {
             if (request.Url.AbsolutePath.ToLower() == "/")
             {
+                var wwwroot = GetWebRoot();
+                var indexFile = "index.html";
+                var absolutePath = Path.Combine(wwwroot, indexFile);
+                if (File.Exists(absolutePath))
+                {
+                    // If an index.html file exists in the root, we won't service root requests any longer.
+                    return false;
+                }
+
                 List<String> links = new List<String>();
                 foreach (var requestHandler in this._requestHandlers.OrderBy(obj => obj.Priority))
                 {
@@ -392,6 +358,56 @@ namespace GnomeServer
             }
 
             return false;
+        }
+
+        private static void ServiceFileRequest(String wwwroot, HttpListenerRequest request, HttpListenerResponse response)
+        {
+            var relativePath = request.Url.AbsolutePath.Substring(1);
+            relativePath = relativePath.Replace("/", Path.DirectorySeparatorChar.ToString());
+
+            // Is the user requesting the default document for a root location?
+            if (String.IsNullOrWhiteSpace(relativePath))
+            {
+                // We'll use "index.html" to indicate this.
+                relativePath = "index.html";
+            }
+            var absolutePath = Path.Combine(wwwroot, relativePath);
+
+            LogMessage(String.Format("ServiceFileRequest: {0} ({1})", request.Url, absolutePath));
+
+            if (File.Exists(absolutePath))
+            {
+                var extension = Path.GetExtension(absolutePath);
+                response.ContentType = Apache.GetMime(extension);
+                response.StatusCode = 200; // HTTP 200 - SUCCESS
+
+                // Open file, read bytes into buffer and write them to the output stream.
+                using (FileStream fileReader = File.OpenRead(absolutePath))
+                {
+                    byte[] buffer = new byte[4096];
+                    int read;
+                    while ((read = fileReader.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        response.OutputStream.Write(buffer, 0, read);
+                    }
+                }
+            }
+            else
+            {
+                String body = String.Format("No resource is available at the specified filepath: {0}", absolutePath);
+
+                IResponseFormatter notFoundResponseFormatter = new PlainTextResponseFormatter(body, HttpStatusCode.NotFound);
+                notFoundResponseFormatter.WriteContent(response);
+            }
+        }
+
+        /// <summary>
+        /// Searches all the assemblies in the current AppDomain for class definitions that implement the <see cref="IRequestHandler"/> interface.  Those classes are instantiated and registered as request handlers.
+        /// </summary>
+        private void RegisterHandlers()
+        {
+            IEnumerable<Type> handlers = FindHandlersInLoadedAssemblies();
+            RegisterHandlers(handlers);
         }
 
         #endregion Reserved Endpoint Handlers
