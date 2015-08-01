@@ -1,7 +1,7 @@
 define(["require", "exports", 'durandal/app', 'durandal/viewLocator'], function (require, exports, app, viewLocator) {
     function start() {
         //system.debug(true);
-        app.title = 'Ensemble';
+        app.title = 'GnomeApp';
         app.configurePlugins({
             router: true,
             dialog: true,

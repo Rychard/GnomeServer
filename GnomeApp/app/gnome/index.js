@@ -1,11 +1,57 @@
-define(["require", "exports", 'durandal/system', 'jquery', "../models/models"], function (require, exports, system, $, models) {
+define(["require", "exports", 'durandal/app', 'durandal/system', 'knockout', 'jquery', "../models/models"], function (require, exports, app, system, ko, $, models) {
     var GnomeSummary = models.GnomeSummary;
     var Index = (function () {
         function Index() {
             var _this = this;
+            this.endpointRoot = "http://localhost:8081/";
             this.name = "Gnomes";
+            this.gameIsPaused = ko.observable(true);
+            this.gnomeSummary = ko.observable();
+            this.selectedGnomeID = ko.observable(0);
+            this.selectedGnome = ko.pureComputed({
+                owner: this,
+                read: function () {
+                    var matches = _this.gnomeSummary().Gnomes().filter(function (value) {
+                        var ID1 = value.ID();
+                        var ID2 = _this.selectedGnomeID && _this.selectedGnomeID() || -1;
+                        return ID1 === ID2;
+                    });
+                    if (matches.length > 0) {
+                        var match = matches[0];
+                        return match;
+                    }
+                    else {
+                        return null;
+                    }
+                },
+                deferEvaluation: true
+            });
+            this.addGnome = function () {
+                var endpoint = _this.endpointRoot + "Gnome/Add";
+                $.get(endpoint).always(function (data) {
+                    _this.loadData();
+                });
+            };
+            this.reassignProfessions = function () {
+                var endpoint = _this.endpointRoot + "Gnome/Assign";
+                $.get(endpoint).always(function (data) {
+                    _this.loadData();
+                });
+            };
+            this.selectGnome = function (gnome) {
+                _this.selectedGnomeID(gnome.ID());
+            };
+            this.refresh = function () {
+                _this.loadData();
+            };
             this.activate = function () {
                 system.log('Lifecycle: activate : gnome/index');
+                app.on("gamePaused").then(function () {
+                    _this.gameIsPaused(true);
+                });
+                app.on("gameUnpaused").then(function () {
+                    _this.gameIsPaused(false);
+                });
                 return _this.loadData();
             };
             this.binding = function () {
@@ -27,11 +73,17 @@ define(["require", "exports", 'durandal/system', 'jquery', "../models/models"], 
         }
         Index.prototype.loadData = function () {
             var _this = this;
-            var endpoint = "http://localhost:8081/Gnome/";
+            var endpoint = this.endpointRoot + "Gnome/";
             var promise = $.getJSON(endpoint).then(function (data) {
-                // Convert every item in the response to a StatusReport instance.
-                _this.gnomeSummary = new GnomeSummary(data);
-                //this.gnomes = data.map((item: Gnome) => { return new Gnome(item); });
+                var obj = new GnomeSummary(data);
+                _this.gnomeSummary(obj);
+                _this.selectedGnomeID(-1);
+                var gnomes = _this.gnomeSummary().Gnomes();
+                if (gnomes) {
+                    var gnome = gnomes[0];
+                    var gnomeID = gnome.ID();
+                    _this.selectedGnomeID(gnomeID);
+                }
                 console.log("promise complete");
             });
             // If the callback returns a "promise"...

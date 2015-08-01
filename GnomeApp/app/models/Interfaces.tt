@@ -5,17 +5,62 @@
 <#@ assembly name="$(TargetDir)$(TargetFileName)" #>
 
 <#@ import namespace="TypeLite" #> 
-<#@ import namespace="TypeLite.Net4" #> 
+<#@ import namespace="TypeLite.Net4" #><#@ import namespace="TypeLite.TsModels" #> 
 <#@output extension=".d.ts"#>
 
 <#@include file="Manager.ttinclude"#>
 
-<# var manager = Manager.Create(Host, GenerationEnvironment); #>
+<# 
+	var manager = Manager.Create(Host, GenerationEnvironment);
+	var ts = TypeScript.Definitions().WithReference("Enums.ts").ForLoadedAssemblies(); 
+	ts = ts.WithTypeFormatter((type, f) => FormatType(type));
+	ts = ts.WithMemberTypeFormatter((type, f) => FormatMember(type));
 
-<# var ts = TypeScript.Definitions().WithReference("Enums.ts").ForLoadedAssemblies().WithTypeFormatter((type, f) => "I" + ((TypeLite.TsModels.TsClass)type).Name); #>
 
+#>
 <#= ts.Generate(TsGeneratorOutput.Properties) #>
 <# manager.StartNewFile("Enums.ts"); #>
 <#= ts.Generate(TsGeneratorOutput.Enums) #>
 <# manager.EndBlock(); #>
 <# manager.Process(true); #>
+
+<#+
+
+    private static Boolean IsCollection(TsType type)
+    {
+        return (type is TypeLite.TsModels.TsCollection);
+    }
+
+	private static String FormatType(TsType type)
+	{
+		if (type is TypeLite.TsModels.TsClass)
+		{
+			return "I" + ((TypeLite.TsModels.TsClass) type).Name;    
+		}
+
+		if (type is TypeLite.TsModels.TsSystemType)
+		{
+			return ((TypeLite.TsModels.TsSystemType) type).Kind.ToString();
+		}
+
+		if (type is TypeLite.TsModels.TsCollection)
+		{
+			var t = ((TypeLite.TsModels.TsCollection) type).ItemsType;
+			return FormatType(t);
+		}
+		return type.GetType().FullName;
+	}
+
+	private static String FormatMember(TsProperty type)
+	{
+	    if (IsCollection(type.PropertyType))
+	    {
+	        return String.Format("KnockoutObservableArray<{0}>", FormatType(type.PropertyType));
+	    }
+	    else
+	    {
+	        return String.Format("KnockoutObservable<{0}>", FormatType(type.PropertyType));
+	    }
+	}
+
+#>

@@ -1,47 +1,51 @@
 ﻿<section>
-    <h1 style="display: inline-block">
-        <span data-bind="text: name"></span>
-        <small>Population: <span data-bind="text: gnomeSummary.Population"></span></small>
-    </h1>
+    <div class="row" style="margin: 15px 0;">
+        <div class="pull-left">
+            <button class="btn btn-default" data-bind="click: addGnome, enable: gameIsPaused">Add Gnome</button>
+            <button class="btn btn-default" data-bind="click: reassignProfessions, enable: gameIsPaused">Recalculate Professions</button>
+        </div>
+        <div class="pull-right">
+            <button class="btn btn-default" data-bind="click: refresh">Refresh</button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
 
-    <div data-bind="foreach: gnomeSummary.Gnomes">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h4>
-                        <span data-bind="text: Name"></span>
-                        <small><span data-bind="text: Profession.Name"></span></small>
-                        <!--<small><span class="text-right" data-bind="text: Location.Text"></span></small>-->
-                    </h4>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h1 class="panel-title">
+                        <span data-bind="text: name"></span>
+                        <span class="badge" data-bind="text: gnomeSummary().Population"></span>
+                    </h1>
                 </div>
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5>Skills</h5>
-                        <div data-bind="foreach: ProfessionSkills">
-                            <div>
-                                <span data-bind="text: Name"></span>: <span data-bind="text: Skill"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <h5>Health</h5>
-                        </div>
-                        <div class="row" style="height: 100px; overflow-y: scroll">
-                            <div data-bind="foreach: BodyParts">
-                                <div>
-                                    <span data-bind="text: BodyPart"></span>: <span data-bind="text: StatusText"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <!--<pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Gnome</th>
+                            <th>Profession</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ko foreach: gnomeSummary().Gnomes -->
+                        <tr data-bind="click: $root.selectGnome, css: { 'active-row': $root.selectedGnomeID() === $data.ID() }">
+                            <td>
+                                <span data-bind="text: Name"></span>
+                            </td>
+                            <td>
+                                <span class="text-muted" data-bind="text: Profession().Name"></span>
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
+        <div class="col-md-9" data-bind="if: selectedGnomeID() >= 0">
+            <!-- ko with: selectedGnome() -->
+            <div data-bind="compose: '../partials/gnome/details.html'"></div>
+            <!-- /ko -->
+        </div>
     </div>
 </section>

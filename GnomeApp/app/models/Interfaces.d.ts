@@ -3,47 +3,46 @@
  
 
 
-
-
 /// <reference path="Enums.ts" />
 
 declare module GnomeServer.Models {
 	interface IGnomeSummary {
-		Population: number;
-		Gnomes: GnomeServer.Models.IGnome[];
+		Population: KnockoutObservable<Number>;
+		Gnomes: KnockoutObservableArray<IGnome>;
 	}
 	interface IGnome {
-		ID: number;
-		Name: string;
-		Stats: GnomeServer.Models.IGnomeStats;
-		Location: GnomeServer.Models.IGnomeLocation;
-		BodyParts: GnomeServer.Models.IGnomeBodyPartStatus[];
-		Skills: GnomeServer.Models.IGnomeSkill[];
-		Profession: GnomeServer.Models.IGnomeProfession;
+		ID: KnockoutObservable<Number>;
+		Name: KnockoutObservable<String>;
+		Stats: KnockoutObservable<IGnomeStats>;
+		Location: KnockoutObservable<IGnomeLocation>;
+		BodyParts: KnockoutObservableArray<IGnomeBodyPartStatus>;
+		Skills: KnockoutObservableArray<IGnomeSkill>;
+		Profession: KnockoutObservable<IGnomeProfession>;
 	}
 	interface IGnomeStats {
-		Happiness: number;
-		BloodLevel: number;
-		Rest: number;
-		Hunger: number;
-		Thirst: number;
+		Happiness: KnockoutObservable<Number>;
+		BloodLevel: KnockoutObservable<Number>;
+		Rest: KnockoutObservable<Number>;
+		Hunger: KnockoutObservable<Number>;
+		Thirst: KnockoutObservable<Number>;
 	}
 	interface IGnomeLocation {
-		X: number;
-		Y: number;
-		Z: number;
+		X: KnockoutObservable<Number>;
+		Y: KnockoutObservable<Number>;
+		Z: KnockoutObservable<Number>;
 	}
 	interface IGnomeBodyPartStatus {
-		BodyPart: string;
-		Statuses: string[];
+		BodyPart: KnockoutObservable<String>;
+		Statuses: KnockoutObservableArray<String>;
 	}
 	interface IGnomeSkill {
-		Name: string;
-		Skill: number;
+		Name: KnockoutObservable<String>;
+		Skill: KnockoutObservable<Number>;
 	}
 	interface IGnomeProfession {
-		Name: string;
-		Skills: string[];
+		Name: KnockoutObservable<String>;
+		Skills: KnockoutObservableArray<String>;
 	}
 }
+
 

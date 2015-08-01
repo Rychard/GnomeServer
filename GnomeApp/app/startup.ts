@@ -5,7 +5,7 @@ import viewLocator = require('durandal/viewLocator');
 export function start() {
     //system.debug(true);
 
-    app.title = 'Ensemble';
+    app.title = 'GnomeApp';
 
     app.configurePlugins({
         router: true,
