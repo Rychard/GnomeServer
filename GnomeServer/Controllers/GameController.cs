@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Globalization;
+using System.Net;
 using Game;
-using GnomeServer.Extensions;
 using GnomeServer.Routing;
 
 namespace GnomeServer.Controllers
@@ -12,46 +9,40 @@ namespace GnomeServer.Controllers
     public sealed class GameController : ConventionRoutingController
     {
         [HttpGet]
-        [Route("")]
-        public IResponseFormatter Get(int speed)
+        [Route("Speed")]
+        public IResponseFormatter GetSpeed()
+        {
+            var world = GnomanEmpire.Instance.World;
+            var speed = new
+            {
+                Speed = world.GameSpeed.Value.ToString(CultureInfo.InvariantCulture),
+                IsPaused = world.Paused.Value.ToString(CultureInfo.InvariantCulture)
+            };
+            return JsonResponse(speed);
+        }
+
+        [HttpPost]
+        [Route("Speed")]
+        public IResponseFormatter PostSpeed(int speed)
         {
             GnomanEmpire.Instance.World.GameSpeed.Value = speed;
-            String content = String.Format("Game Speed set to '{0}'", speed);
-            return JsonResponse(content);
+            return BlankResponse(HttpStatusCode.NoContent);
         }
 
-        public IResponseFormatter Test()
+        [HttpPost]
+        [Route("Pause")]
+        public IResponseFormatter PostPause()
         {
-            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-
-            var fields = typeof(Character).GetFields(bindFlags);
-            var behaviorTypeFields = fields.Where(obj => obj.FieldType == typeof(BehaviorType)).ToList();
-
-            List<TestResponse> testResponses = new List<TestResponse>();
-
-            var members = GnomanEmpire.Instance.GetGnomes();
-            foreach (var characterKey in members)
-            {
-                var character = characterKey.Value;
-                var name = character.NameAndTitle();
-
-                foreach (var fieldInfo in behaviorTypeFields)
-                {
-                    var val = (BehaviorType)(fieldInfo.GetValue(character));
-                    testResponses.Add(new TestResponse
-                    {
-                        Name = name,
-                        Value = val.ToString(),
-                    });
-                }
-            }
-            return JsonResponse(testResponses);
+            GnomanEmpire.Instance.World.Paused.Value = true;
+            return BlankResponse(HttpStatusCode.NoContent);
         }
 
-        private class TestResponse
+        [HttpPost]
+        [Route("Play")]
+        public IResponseFormatter PostPlay()
         {
-            public String Name { get; set; }
-            public String Value { get; set; }
+            GnomanEmpire.Instance.World.Paused.Value = false;
+            return BlankResponse(HttpStatusCode.NoContent);
         }
     }
 }
