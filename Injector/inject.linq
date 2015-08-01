@@ -18,7 +18,6 @@ void Main()
     // When not set, defaults to the installation path defined above.
     String outputPath = "";
     
-    
     ///
     /// ADVANCED CONFIGURATION OPTIONS
     ///
@@ -67,6 +66,14 @@ void Main()
         AssemblyResolver = resolver,
     };
 
+    resolver.ResolveFailure += (sender, args) =>
+    {
+        sender.Dump("sender");
+        args.Dump("args");
+        return null;
+    };
+    
+    
     AssemblyDefinition assemblyGnomoria = AssemblyDefinition.ReadAssembly(pathGnomoria, p);
     AssemblyDefinition assemblyInject = AssemblyDefinition.ReadAssembly(pathInject, p);
 
@@ -79,9 +86,9 @@ void Main()
     
     var typeGnomanEmpire = moduleGnomoria.Types.Single(obj => obj.FullName == moduleTypeInjectTarget);
     var methodGetInstance = typeGnomanEmpire.Methods.Single(obj => obj.Name == methodNameInjectTarget);
-    var ret = methodGetInstance.Body.Instructions.Last();
     var il = methodGetInstance.Body.GetILProcessor();
     var nextInstruction = il.Create(Mono.Cecil.Cil.OpCodes.Call, moduleGnomoria.Import(methodHook));
+    var ret = methodGetInstance.Body.Instructions.Last();
     il.InsertBefore(ret, nextInstruction);
 
     if (String.IsNullOrWhiteSpace(outputPath))
