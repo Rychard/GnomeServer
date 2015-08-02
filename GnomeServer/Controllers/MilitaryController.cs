@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Game;
 using GnomeServer.Extensions;
@@ -7,6 +8,7 @@ using GnomeServer.Routing;
 
 namespace GnomeServer.Controllers
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     [Route("Military")]
     public sealed class MilitaryController : ConventionRoutingController
     {
@@ -23,7 +25,7 @@ namespace GnomeServer.Controllers
         {
             var game = GnomanEmpire.Instance;
             var playerFaction = game.World.AIDirector.PlayerFaction;
-            var gnomes = game.GetGnomes().Select(obj => obj.Value);
+            var gnomes = game.GetGnomes();
             foreach (var gnome in gnomes)
             {
                 // Because we are potentially creating squads inside this loop, we should always refresh this collection on each iteration.
@@ -38,7 +40,7 @@ namespace GnomeServer.Controllers
                     foreach (var squad in squads)
                     {
                         // A Squad can only have 5 Gnomes in it.
-                        for (uint i = 0; i < 5; i++)
+                        for (UInt32 i = 0; i < 5; i++)
                         {
                             Boolean isVacant = (squad.Members[i] == null);
                             if (isVacant)

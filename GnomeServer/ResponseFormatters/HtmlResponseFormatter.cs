@@ -17,9 +17,9 @@ namespace GnomeServer.ResponseFormatters
 
         public override void WriteContent(HttpListenerResponse response)
         {
-            byte[] buf = Encoding.UTF8.GetBytes(_content);
+            Byte[] buf = Encoding.UTF8.GetBytes(_content);
 
-            response.StatusCode = (int)_statusCode;
+            response.StatusCode = (Int32)_statusCode;
             response.ContentType = "text/html";
             response.ContentLength64 = buf.Length;
             response.OutputStream.Write(buf, 0, buf.Length);

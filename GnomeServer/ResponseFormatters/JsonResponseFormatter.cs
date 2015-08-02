@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -18,9 +19,9 @@ namespace GnomeServer.ResponseFormatters
         public override void WriteContent(HttpListenerResponse response)
         {
             var serializedData = Newtonsoft.Json.JsonConvert.SerializeObject(_content, Formatting.Indented);
-            byte[] buf = Encoding.UTF8.GetBytes(serializedData);
+            Byte[] buf = Encoding.UTF8.GetBytes(serializedData);
 
-            response.StatusCode = (int)_statusCode;
+            response.StatusCode = (Int32)_statusCode;
             response.ContentType = "text/json";
             response.ContentLength64 = buf.Length;
             response.OutputStream.Write(buf, 0, buf.Length);

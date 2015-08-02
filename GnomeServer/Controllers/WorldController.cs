@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Reflection;
-using System.Text;
 using Game;
 using GnomeServer.Routing;
 
 namespace GnomeServer.Controllers
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     [Route("World")]
     public sealed class WorldController : ConventionRoutingController
     {

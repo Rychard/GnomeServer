@@ -1,10 +1,13 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Net;
 using Game;
 using GnomeServer.Routing;
 
 namespace GnomeServer.Controllers
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     [Route("Game")]
     public sealed class GameController : ConventionRoutingController
     {
@@ -23,7 +26,7 @@ namespace GnomeServer.Controllers
 
         [HttpPost]
         [Route("Speed")]
-        public IResponseFormatter PostSpeed(int speed)
+        public IResponseFormatter PostSpeed(Int32 speed)
         {
             GnomanEmpire.Instance.World.GameSpeed.Value = speed;
             return BlankResponse(HttpStatusCode.NoContent);

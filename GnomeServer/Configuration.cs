@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using Game;
-using Game.GUI.Controls;
 using Newtonsoft.Json;
 
 namespace GnomeServer
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     public static class Configuration
     {
         private static readonly Object LockerObject = new Object();
@@ -30,7 +32,7 @@ namespace GnomeServer
             }
             catch (Exception)
             {
-                var myDocuments = Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+                var myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 var myGames = Path.Combine(myDocuments, "My Games");
                 var gameFolder = Path.Combine(myGames, "Gnomoria");
                 return gameFolder;
@@ -40,7 +42,7 @@ namespace GnomeServer
         private static String GetFilePath(String fileName)
         {
             var gameFolder = GetUserDataPath();
-            var filePath = System.IO.Path.Combine(gameFolder, fileName);
+            var filePath = Path.Combine(gameFolder, fileName);
             return CanAccess(filePath) ? filePath : fileName;
         }
 
@@ -60,7 +62,9 @@ namespace GnomeServer
         {
             try
             {
-                using (var fileStream = System.IO.File.Open(filePath, FileMode.OpenOrCreate, FileAccess.Read))
+                // Using exceptions for program flow, not the best thing in the world, but it remains until I implement a better solution.
+                // ReSharper disable once UnusedVariable
+                using (var fileStream = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.Read))
                 {
                     return true;
                 }
@@ -96,15 +100,17 @@ namespace GnomeServer
                 // No settings to save?  Don't save anything.
                 if (_settings == null) { return; }
 
-                if (System.IO.File.Exists(_filePath))
+                if (File.Exists(_filePath))
                 {
-                    System.IO.File.Delete(_filePath);
+                    File.Delete(_filePath);
                 }
 
                 using (StreamWriter file = File.CreateText(_filePath))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Formatting = Formatting.Indented;
+                    JsonSerializer serializer = new JsonSerializer
+                    {
+                        Formatting = Formatting.Indented
+                    };
                     serializer.Serialize(file, _settings);
                 }
             }
@@ -170,19 +176,19 @@ namespace GnomeServer
                     switch (t)
                     {
                         case "string":
-                            return typeof(string);
+                            return typeof(String);
 
                         case "int":
-                            return typeof(int);
+                            return typeof(Int32);
 
                         case "float":
-                            return typeof(float);
+                            return typeof(Single);
 
                         case "double":
-                            return typeof(double);
+                            return typeof(Double);
 
                         default:
-                            return typeof(object);
+                            return typeof(Object);
                     }
                 }
                 return null;
@@ -206,18 +212,18 @@ namespace GnomeServer
 
         #region Integer
 
-        public static int GetInt(String key)
+        public static Int32 GetInt(String key)
         {
             var raw = GetSettingRaw(key);
-            int i;
-            if (int.TryParse(raw, out i))
+            Int32 i;
+            if (Int32.TryParse(raw, out i))
             {
                 return i;
             }
-            return default(int);
+            return default(Int32);
         }
 
-        public static void SetInt(String key, int value)
+        public static void SetInt(String key, Int32 value)
         {
             SetSettingRaw(key, value.ToString(CultureInfo.InvariantCulture), "int");
         }
@@ -226,18 +232,18 @@ namespace GnomeServer
 
         #region Float
 
-        public static float GetFloat(String key)
+        public static Single GetFloat(String key)
         {
             var raw = GetSettingRaw(key);
-            float f;
-            if (float.TryParse(raw, out f))
+            Single f;
+            if (Single.TryParse(raw, out f))
             {
                 return f;
             }
-            return default(float);
+            return default(Single);
         }
 
-        public static void SetFloat(String key, float value)
+        public static void SetFloat(String key, Single value)
         {
             SetSettingRaw(key, value.ToString(CultureInfo.InvariantCulture), "float");
         }
@@ -246,18 +252,18 @@ namespace GnomeServer
 
         #region Double
 
-        public static double GetDouble(String key)
+        public static Double GetDouble(String key)
         {
             var raw = GetSettingRaw(key);
-            double d;
-            if (double.TryParse(raw, out d))
+            Double d;
+            if (Double.TryParse(raw, out d))
             {
                 return d;
             }
-            return default(double);
+            return default(Double);
         }
 
-        public static void SetDouble(String key, double value)
+        public static void SetDouble(String key, Double value)
         {
             SetSettingRaw(key, value.ToString(CultureInfo.InvariantCulture), "double");
         }

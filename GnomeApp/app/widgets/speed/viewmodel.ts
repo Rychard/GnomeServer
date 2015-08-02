@@ -1,8 +1,8 @@
 ﻿import app = require('durandal/app');
-import jquery = require('jquery');
 import ko = require('knockout');
 
 class Speed {
+    // TODO: Determine the actual endpoint from the API if it differs from the default?
     endpointRoot = "http://localhost:8081/";
     updateToken: any;
 

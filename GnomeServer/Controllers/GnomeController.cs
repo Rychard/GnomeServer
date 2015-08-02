@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Game;
 using GnomeServer.Extensions;
@@ -8,6 +9,7 @@ using GnomeServer.Routing;
 
 namespace GnomeServer.Controllers
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     [Route("Gnome")]
     public sealed class GnomeController: ConventionRoutingController
     {
@@ -15,21 +17,10 @@ namespace GnomeServer.Controllers
         public IResponseFormatter Get()
         {
             // Before the player has started/loaded a game, some properties won't be populated.
-            var playerMembers = GnomanEmpire.Instance.GetGnomes();
-            var skillDefinitions = GnomanEmpire.Instance.GameDefs.SkillDefs;
+            var gameGnomes = GnomanEmpire.Instance.GetGnomes();
+            var skillDefinitions = GnomanEmpire.Instance.GetSkillDefs();
 
-            List<Gnome> gnomes = new List<Gnome>();
-
-            if (playerMembers != null)
-            {
-                gnomes.AddRange(playerMembers.Select(playerMember => new Gnome(playerMember.Value, skillDefinitions)));
-            }
-
-            var summary = new GnomeSummary
-            {
-                Population = gnomes.Count,
-                Gnomes = gnomes.ToArray(),
-            };
+            GnomeSummary summary = new GnomeSummary(gameGnomes, skillDefinitions);
 
             return JsonResponse(summary);
         }
@@ -37,18 +28,18 @@ namespace GnomeServer.Controllers
         [Route("Add")]
         public IResponseFormatter Add()
         {
-            var skillDefinitions = GnomanEmpire.Instance.GameDefs.SkillDefs;
+            var skillDefinitions = GnomanEmpire.Instance.GetSkillDefs();
             var faction = GnomanEmpire.Instance.World.AIDirector.PlayerFaction;
             var entryPosition = faction.FindRegionEntryPosition();
 
             var gnomadRaceClassDefs = faction.FactionDef.Squads.SelectMany(squad => squad.Classes.Where(squadClass => squadClass.Name == "Gnomad")).ToList();
-            int defCount = gnomadRaceClassDefs.Count;
-            int raceClassDefIndex = GnomanEmpire.Instance.Rand.Next(defCount);
+            Int32 defCount = gnomadRaceClassDefs.Count;
+            Int32 raceClassDefIndex = GnomanEmpire.Instance.Rand.Next(defCount);
             var raceClassDef = gnomadRaceClassDefs[raceClassDefIndex];
             var gnomad = new Character(entryPosition, raceClassDef, faction.ID);
             gnomad.SetBehavior(BehaviorType.PlayerCharacter);
 
-            Dictionary<String, int> orderedProfessions = GetBestProfessions(gnomad);
+            Dictionary<String, Int32> orderedProfessions = GetBestProfessions(gnomad);
             var bestProfession = orderedProfessions.OrderByDescending(obj => obj.Value).First().Key;
             SetProfession(gnomad, bestProfession);
             
@@ -62,12 +53,10 @@ namespace GnomeServer.Controllers
         [Route("Assign")]
         public IResponseFormatter Assign()
         {
-            var playerMembers = GnomanEmpire.Instance.GetGnomes();
-            foreach (var playerMember in playerMembers)
+            var gnomes = GnomanEmpire.Instance.GetGnomes();
+            foreach (var gnome in gnomes)
             {
-                var gnome = playerMember.Value;
-
-                Dictionary<String, int> orderedProfessions = GetBestProfessions(gnome);
+                Dictionary<String, Int32> orderedProfessions = GetBestProfessions(gnome);
                 var bestProfession = orderedProfessions.OrderByDescending(obj => obj.Value).First().Key;
                 SetProfession(gnome, bestProfession);
                 GnomanEmpire.Instance.World.NotificationManager.AddNotification(String.Format("{0} has been assigned as a {1}", gnome.Name(), bestProfession));
@@ -75,29 +64,29 @@ namespace GnomeServer.Controllers
             return Get();
         }
 
-        private Dictionary<String, int> GetBestProfessions(Character gnomad)
+        private Dictionary<String, Int32> GetBestProfessions(Character gnome)
         {
             var professionSkills = GetSkillsByProfession();
 
-            Dictionary<String, int> professionScores = new Dictionary<String, int>();
+            Dictionary<String, Int32> professionScores = new Dictionary<String, Int32>();
             foreach (var professionSkill in professionSkills)
             {
                 var profession = professionSkill.Key;
                 var skills = professionSkill.Value;
 
-                int score = 0;
-                int skillCount = skills.Count;
-                var skillWeights = GetRatios(skillCount, 0.5);
-                for (int i = 0; i < skillCount; i++)
+                Int32 score = 0;
+                Int32 skillCount = skills.Count;
+                var skillWeights = GetRatios(skillCount);
+                for (Int32 i = 0; i < skillCount; i++)
                 {
                     // Professions consist of multiple jobs.
                     // The other of the jobs within the profession is used when determining the next job a Gnome will perform.
                     // Note: All tasks must be completed for all higher jobs before a gnome will queue a task in a lower priority job
-                    // As a result, we should weight each gnome's skills based on the liklihood of them queueing for those tasks in a given job.
+                    // As a result, we should weight each gnome's skills based on the likelihood of them queuing for those tasks in a given job.
 
-                    int rawSkill = gnomad.SkillLevel(skills[i]);
+                    Int32 rawSkill = gnome.SkillLevel(skills[i]);
                     Double weightedSkill = rawSkill * skillWeights[i];
-                    int weightedRoundedSkill = (int)Math.Round(weightedSkill, 0);
+                    Int32 weightedRoundedSkill = (Int32)Math.Round(weightedSkill, 0);
                     score += weightedRoundedSkill;
                 }
 
@@ -137,17 +126,17 @@ namespace GnomeServer.Controllers
         /// </summary>
         /// <param name="rateOfChange">The rate at which the ratios change.</param>
         /// <param name="length">The length of the sequence for which weighting coefficients will be returned.</param>
-        /// <returns>An array of <paramref name="length"/> length, that contains the weighting coeffecients.</returns>
+        /// <returns>An array of <paramref name="length"/> length, that contains the weighting coefficients.</returns>
         /// <remarks>
         /// The sum of the array's elements should always equal 1.
         /// When a low value is provided for <paramref name="length"/>, the sum of the array elements is measurably smaller than 1.
         /// Consequently, after all elements in the sequence have been calculated, the remainder is divided equally between all elements such that their sum approaches 1.
         /// </remarks>
-        public Double[] GetRatios(int length, Double rateOfChange = 0.5)
+        public Double[] GetRatios(Int32 length, Double rateOfChange = 0.5)
         {
-            Double[] ratios = new double[length];
+            Double[] ratios = new Double[length];
             Double currentAmount = 1;
-            for (int i = 0; i < ratios.Length; i++)
+            for (Int32 i = 0; i < ratios.Length; i++)
             {
                 Double currentVal = currentAmount * rateOfChange;
                 Double remaining = currentAmount - currentVal;
@@ -159,6 +148,9 @@ namespace GnomeServer.Controllers
             // When the number of buckets is very small, a significant portion is not represented in the output.
             // To account for this, we split the remaining portion and apply it evenly among every bucket.
             currentAmount /= length;
+            
+            // Sometimes Resharper is a little dumb.
+            // ReSharper disable once RedundantAssignment
             ratios = ratios.Select(bucket => bucket += currentAmount).ToArray();
             return ratios;
         }

@@ -5,7 +5,6 @@ import $ = require('jquery');
 
 import models = require("../models/models");
 import GnomeSummary = models.GnomeSummary;
-import GnomeSkill = models.GnomeSkill;
 
 class Index {
     endpointRoot = "http://localhost:8081/";
@@ -35,14 +34,14 @@ class Index {
 
     addGnome = () => {
         var endpoint = this.endpointRoot + "Gnome/Add";
-        $.get(endpoint).always((data) => {
+        $.get(endpoint).always(() => {
             this.loadData();
         });
     }
 
     reassignProfessions = () => {
         var endpoint = this.endpointRoot + "Gnome/Assign";
-        $.get(endpoint).always((data) => {
+        $.get(endpoint).always(() => {
             this.loadData();
         });
     }

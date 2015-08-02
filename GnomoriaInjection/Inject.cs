@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using Game;
@@ -9,11 +10,12 @@ using GnomeServer;
 
 namespace GnomoriaInjection
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public static class Inject
     {
         private static readonly Object _lockObject = new Object();
-        private static IntegratedWebServer _integratedWebServer;
-        private static Boolean _stopping = false;
+        private static IWebServer _webServer;
+        private static Boolean _stopping;
 
         public static void Hook()
         {
@@ -22,12 +24,12 @@ namespace GnomoriaInjection
 
             lock (_lockObject)
             {
-                if (_integratedWebServer == null)
+                if (_webServer == null)
                 {
                     try
                     {
-                        _integratedWebServer = new IntegratedWebServer();
-                        _integratedWebServer.Start();
+                        _webServer = new IntegratedWebServer();
+                        _webServer.Start();
                         GnomanEmpire.Instance.Exiting += OnExiting;
                     }
                     catch (Exception ex)
@@ -54,9 +56,9 @@ namespace GnomoriaInjection
             File.WriteAllText(errorLogPath, sb.ToString());
         }
 
-        private static void OnExiting(object sender, EventArgs args)
+        private static void OnExiting(Object sender, EventArgs args)
         {
-            var server = _integratedWebServer;
+            var server = _webServer;
             if (server != null)
             {
                 _stopping = true;

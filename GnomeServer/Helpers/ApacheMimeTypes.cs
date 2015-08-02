@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 
 // Source: https://raw.githubusercontent.com/cymen/ApacheMimeTypesToDotNet/master/ApacheMimeTypes.cs
+
+// ReSharper disable once CheckNamespace
 namespace ApacheMimeTypes
 {
-    internal class Apache
+    internal static class Apache
     {
-        private static Dictionary<String, String> _mimeTypes = new Dictionary<String, String>
+        private static readonly Dictionary<String, String> _mimeTypes = new Dictionary<String, String>
 		{
 			{ "123", "application/vnd.lotus-1-2-3" },
 			{ "3dml", "text/vnd.in3d.3dml" },

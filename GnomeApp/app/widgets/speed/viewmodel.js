@@ -2,6 +2,7 @@ define(["require", "exports", 'durandal/app', 'knockout'], function (require, ex
     var Speed = (function () {
         function Speed() {
             var _this = this;
+            // TODO: Determine the actual endpoint from the API if it differs from the default?
             this.endpointRoot = "http://localhost:8081/";
             this.speedDecrease = function () {
                 var current = _this.speedCurrent();

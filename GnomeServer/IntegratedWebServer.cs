@@ -17,7 +17,7 @@ namespace GnomeServer
         private const String WebServerHostKey = "webServerHost{0}";
 
         private static List<String> _logLines;
-        private static string _endpoint;
+        private static String _endpoint;
 
         private WebServer _server;
         private List<IRequestHandler> _requestHandlers;
@@ -69,16 +69,16 @@ namespace GnomeServer
                 _server = null;
             }
 
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            Assembly assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            string version = fvi.FileVersion;
+            String version = fvi.FileVersion;
             LogMessage(String.Format("GnomeServer Version {0}", version));
 
             LogMessage("Initializing Server...");
 
             List<String> bindings = new List<String>();
 
-            int currentBinding = 1;
+            Int32 currentBinding = 1;
             String currentBindingKey = String.Format(WebServerHostKey, currentBinding);
             while (Configuration.HasSetting(currentBindingKey))
             {
@@ -116,9 +116,7 @@ namespace GnomeServer
             }
             catch (Exception ex)
             {
-                //UnityEngine.Debug.LogException(ex);
-
-                // TODO
+                LogMessage(ex.ToString(), "Exception");
                 throw;
             }
         }
@@ -249,7 +247,7 @@ namespace GnomeServer
             }
         }
 
-        private void RequestHandlerLogAppender_OnLogMessage(object sender, LogAppenderEventArgs logAppenderEventArgs)
+        private void RequestHandlerLogAppender_OnLogMessage(Object sender, LogAppenderEventArgs logAppenderEventArgs)
         {
             var senderTypeName = sender.GetType().Name;
             LogMessage(logAppenderEventArgs.LogLine, senderTypeName);
@@ -384,8 +382,8 @@ namespace GnomeServer
                 // Open file, read bytes into buffer and write them to the output stream.
                 using (FileStream fileReader = File.OpenRead(absolutePath))
                 {
-                    byte[] buffer = new byte[4096];
-                    int read;
+                    Byte[] buffer = new Byte[4096];
+                    Int32 read;
                     while ((read = fileReader.Read(buffer, 0, buffer.Length)) > 0)
                     {
                         response.OutputStream.Write(buffer, 0, read);
@@ -432,7 +430,7 @@ namespace GnomeServer
         /// <summary>
         /// Writes the value of <paramref name="args"/>.<see cref="LogAppenderEventArgs.LogLine"/> to the internal log.
         /// </summary>
-        private void ServerOnLogMessage(object sender, LogAppenderEventArgs args)
+        private void ServerOnLogMessage(Object sender, LogAppenderEventArgs args)
         {
             LogMessage(args.LogLine);
         }

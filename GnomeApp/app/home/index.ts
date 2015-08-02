@@ -1,7 +1,4 @@
-﻿import app = require('durandal/app');
-import system = require('durandal/system');
-import ko = require('knockout');
-import $ = require('jquery');
+﻿import system = require('durandal/system');
 
 class Index {
     activate = () => {

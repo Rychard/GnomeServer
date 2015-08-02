@@ -22,20 +22,18 @@ namespace GnomeServer
 
         #endregion ILogAppender Implementation
 
-        private String _name;
-
         /// <summary>
         /// Gets the display name of this request handler.
         /// </summary>
         public virtual String Name
         {
-            get { return String.IsNullOrWhiteSpace(_name) ? GetType().Name : _name; }
+            get { return GetType().Name; }
         }
 
         /// <summary>
         /// Gets the priority of this request handler.  A request will be handled by the request handler with the lowest priority.
         /// </summary>
-        public int Priority { get; set; }
+        public Int32 Priority { get; set; }
 
         /// <summary>
         /// Returns a value that indicates whether this handler is capable of servicing the given request.

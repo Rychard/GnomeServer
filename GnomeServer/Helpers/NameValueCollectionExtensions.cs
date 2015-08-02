@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 
@@ -20,10 +19,10 @@ namespace GnomeServer.Helpers
         /// Gets the value of the specified key as an integer.
         /// </summary>
         /// <returns>Returns the value of the integer in the specified key, or <c>null</c> if the value is not a valid integer.</returns>
-        public static int? GetInteger(this NameValueCollection nvc, String key)
+        public static Int32? GetInteger(this NameValueCollection nvc, String key)
         {
             var value = nvc.Get(key);
-            int result;
+            Int32 result;
             if (Int32.TryParse(value, out result))
             {
                 return result;

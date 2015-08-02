@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -9,6 +10,7 @@ using GnomeServer.Routing;
 
 namespace GnomeServer
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public abstract class ConventionRoutingController : RequestHandlerBase
     {
         private String _classRoute;
@@ -52,7 +54,7 @@ namespace GnomeServer
             }
 
             String actionPath = path;
-            int queryStringOffset = actionPath.IndexOf("?", StringComparison.InvariantCultureIgnoreCase);
+            Int32 queryStringOffset = actionPath.IndexOf("?", StringComparison.InvariantCultureIgnoreCase);
             if (queryStringOffset > 0)
             {
                 actionPath = actionPath.Substring(0, queryStringOffset);
@@ -82,7 +84,17 @@ namespace GnomeServer
                     {
                         // TODO: Technically a querystring parameter can be specified multiple times to indicate a collection of values.
                         // However, let's keep it simple for now.
-                        var value = request.QueryString.GetValues(parameterName).SingleOrDefault();
+
+                        String value;
+                        String[] values = request.QueryString.GetValues(parameterName);
+                        if (values != null)
+                        {
+                            value = values.SingleOrDefault();
+                        }
+                        else
+                        {
+                            value = "";
+                        }
 
                         // In ASP.NET MVC, the model binder is really powerful.
                         // I admit that this one is quite lacking in comparison.
@@ -90,19 +102,19 @@ namespace GnomeServer
                         {
                             parameters.Add(value);
                         }
-                        else if (parameterType == typeof (Boolean))
+                        else if (parameterType == typeof (Boolean) && value != null)
                         {
                             parameters.Add(Boolean.Parse(value));
                         }
-                        else if (parameterType == typeof (Int32))
+                        else if (parameterType == typeof (Int32) && value != null)
                         {
                             parameters.Add(Int32.Parse(value));
                         }
-                        else if (parameterType == typeof (Single)) // float
+                        else if (parameterType == typeof (Single) && value != null) // float
                         {
                             parameters.Add(Single.Parse(value));
                         }
-                        else if (parameterType == typeof (Double)) // float
+                        else if (parameterType == typeof (Double) && value != null)
                         {
                             parameters.Add(Double.Parse(value));
                         }
@@ -110,7 +122,6 @@ namespace GnomeServer
                 }
                 return (IResponseFormatter)methodInfo.Invoke(this, parameters.ToArray());
             }
-        
         }
 
         private void CacheRoutes()

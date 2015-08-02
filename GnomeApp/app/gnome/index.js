@@ -28,13 +28,13 @@ define(["require", "exports", 'durandal/app', 'durandal/system', 'knockout', 'jq
             });
             this.addGnome = function () {
                 var endpoint = _this.endpointRoot + "Gnome/Add";
-                $.get(endpoint).always(function (data) {
+                $.get(endpoint).always(function () {
                     _this.loadData();
                 });
             };
             this.reassignProfessions = function () {
                 var endpoint = _this.endpointRoot + "Gnome/Assign";
-                $.get(endpoint).always(function (data) {
+                $.get(endpoint).always(function () {
                     _this.loadData();
                 });
             };

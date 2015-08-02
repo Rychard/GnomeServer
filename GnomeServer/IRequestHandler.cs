@@ -11,7 +11,7 @@ namespace GnomeServer
         /// <summary>
         /// Gets the priority of this request handler.  A request will be handled by the request handler with the lowest priority.
         /// </summary>
-        int Priority { get; }
+        Int32 Priority { get; }
 
         /// <summary>
         /// Gets the display name of this request handler.
