@@ -23,9 +23,11 @@
     <Content Include="app\gnome\index.html" />
     <Content Include="app\home\index.html" />
     <Content Include="app\loading.html" />
+    <Content Include="app\military\index.html" />
     <Content Include="app\shell.html" />
     <Content Include="app\partials\gnome\details.html" />
     <Content Include="app\widgets\speed\view.html" />
+    <Content Include="app\world\index.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -89,6 +91,7 @@
     <TypeScriptCompile Include="app\gnome\index.ts" />
     <TypeScriptCompile Include="app\home\index.ts" />
     <TypeScriptCompile Include="app\main.ts" />
+    <TypeScriptCompile Include="app\military\index.ts" />
     <TypeScriptCompile Include="app\misc.ts" />
     <TypeScriptCompile Include="app\models\Enums.ts">
       <DependentUpon>Interfaces.tt</DependentUpon>
@@ -103,6 +106,7 @@
     <TypeScriptCompile Include="app\startup.ts" />
     <TypeScriptCompile Include="app\utils.ts" />
     <TypeScriptCompile Include="app\widgets\speed\viewmodel.ts" />
+    <TypeScriptCompile Include="app\world\index.ts" />
     <TypeScriptCompile Include="Scripts\typings\durandal\durandal.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />

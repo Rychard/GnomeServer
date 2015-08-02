@@ -100,7 +100,7 @@ namespace GnomeServer.Controllers
                 }
             }
 
-            return new ImageResponseFormatter(output);
+            return ImageResponse(output);
         }
     }
 }

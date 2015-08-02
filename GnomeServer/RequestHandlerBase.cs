@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Net;
 using GnomeServer.Logging;
 using GnomeServer.ResponseFormatters;
@@ -75,6 +76,14 @@ namespace GnomeServer
         protected IResponseFormatter BlankResponse(HttpStatusCode statusCode)
         {
             return new BlankResponseFormatter(statusCode);
+        }
+
+        /// <summary>
+        /// Returns a response as an image.
+        /// </summary>
+        protected IResponseFormatter ImageResponse(Bitmap content, HttpStatusCode statusCode = HttpStatusCode.OK)
+        {
+            return new ImageResponseFormatter(content, statusCode);
         }
     }
 }
