@@ -19,7 +19,8 @@ namespace GnomeServer.Controllers
         {
             GnomanEmpire.GameState gameState = GnomanEmpire.Instance.GameState();
             var value = Enum.GetName(typeof (GnomanEmpire.GameState), gameState);
-            return JsonResponse(value);
+            var obj = new { State = value };
+            return JsonResponse(obj);
         }
 
         [HttpGet]

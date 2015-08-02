@@ -61,7 +61,7 @@ class Index {
             this.gnomeSummary(obj);
             this.selectedGnomeID(-1);
             var gnomes = this.gnomeSummary().Gnomes();
-            if (gnomes) {
+            if (gnomes && gnomes.length > 0) {
                 var gnome = gnomes[0];
                 var gnomeID = gnome.ID();
                 this.selectedGnomeID(gnomeID);
