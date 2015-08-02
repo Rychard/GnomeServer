@@ -87,8 +87,14 @@
     <Compile Include="IResponseFormatter.cs" />
     <Compile Include="IWebServer.cs" />
     <Compile Include="Logging\LogAppenderEventArgs.cs" />
-    <Compile Include="Models\GnomeModels.cs" />
-    <Compile Include="Models\MilitaryModels.cs" />
+    <Compile Include="Models\Gnome\Gnome.cs" />
+    <Compile Include="Models\Gnome\GnomeBodyPartStatus.cs" />
+    <Compile Include="Models\Gnome\GnomeSummary.cs" />
+    <Compile Include="Models\Gnome\GnomeProfession.cs" />
+    <Compile Include="Models\Gnome\GnomeSkill.cs" />
+    <Compile Include="Models\Gnome\GnomeStats.cs" />
+    <Compile Include="Models\General\Location.cs" />
+    <Compile Include="Models\Military\GnomeSquad.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
