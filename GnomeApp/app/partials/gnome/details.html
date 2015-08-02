@@ -10,7 +10,7 @@
     </div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h5><span data-bind="text: Profession().Name"></span> Skills</h5>
                 <div data-bind="foreach: ProfessionSkills">
                     <div>
@@ -25,7 +25,15 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <h5>Combat Skills</h5>
+                <div data-bind="foreach: CombatSkills">
+                    <div>
+                        <span data-bind="text: Name"></span>: <span data-bind="text: Skill"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
                 <div class="row">
                     <h5>Health</h5>
                 </div>

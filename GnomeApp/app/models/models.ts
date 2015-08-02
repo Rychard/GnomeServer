@@ -5,9 +5,9 @@ export class GnomeSummary implements models.IGnomeSummary {
     Population: KnockoutObservable<number>;
     Gnomes: KnockoutObservableArray<GnomeServer.Models.IGnome>;
 
-    constructor(obj: any) {
+    constructor(obj: models.jsonGnomeSummary) {
         this.Population = ko.observable<number>(obj.Population);
-        this.Gnomes = ko.observableArray<GnomeServer.Models.IGnome>(obj.Gnomes.map((item: Gnome) => { return new Gnome(item); }));
+        this.Gnomes = ko.observableArray<GnomeServer.Models.IGnome>(obj.Gnomes.map((item: models.jsonGnome) => { return new Gnome(item); }));
     }
 }
 
@@ -15,7 +15,7 @@ class GnomeProfession implements GnomeServer.Models.IGnomeProfession {
     Name: KnockoutObservable<string>;
     Skills: KnockoutObservableArray<string>;
 
-    constructor(obj: any) {
+    constructor(obj: models.jsonGnomeProfession) {
         this.Name = ko.observable(obj.Name);
         this.Skills = ko.observableArray<string>(obj.Skills);
     }
@@ -27,14 +27,15 @@ export class Gnome implements models.IGnome {
     Stats: KnockoutObservable<GnomeServer.Models.IGnomeStats>;
     Location: KnockoutObservable<GnomeServer.Models.ILocation>;
     BodyParts: KnockoutObservableArray<GnomeServer.Models.IGnomeBodyPartStatus>;
-    Skills: KnockoutObservableArray<GnomeServer.Models.IGnomeSkill>;
+    LaborSkills: KnockoutObservableArray<GnomeServer.Models.IGnomeSkill>;
+    CombatSkills: KnockoutObservableArray<GnomeServer.Models.IGnomeSkill>;
     Profession: KnockoutObservable<GnomeServer.Models.IGnomeProfession>;
 
     // An array of skills that are applicable to the Gnome's current profession.
     ProfessionSkills: KnockoutComputed<models.IGnomeSkill[]> = ko.pureComputed({
         owner: this,
         read: () => {
-            var professionSkills = this.Skills().filter((value: models.IGnomeSkill) => {
+            var professionSkills = this.LaborSkills().filter((value: models.IGnomeSkill) => {
                 return this.Profession().Skills().indexOf(value.Name()) >= 0;
             });
             return GnomeSkill.SortBySkill(professionSkills, true);
@@ -46,7 +47,7 @@ export class Gnome implements models.IGnome {
     NonProfessionSkills: KnockoutComputed<models.IGnomeSkill[]> = ko.pureComputed({
         owner: this,
         read: () => {
-            var nonprofessionSkills = this.Skills().filter((value: models.IGnomeSkill) => {
+            var nonprofessionSkills = this.LaborSkills().filter((value: models.IGnomeSkill) => {
                 return this.Profession().Skills().indexOf(value.Name()) < 0;
             });
             return GnomeSkill.SortBySkill(nonprofessionSkills, true);
@@ -54,13 +55,14 @@ export class Gnome implements models.IGnome {
         deferEvaluation: true
     });
 
-    constructor(obj: any) {
+    constructor(obj: models.jsonGnome) {
         this.ID = ko.observable(obj.ID);
         this.Name = ko.observable(obj.Name);
         this.Stats = ko.observable<GnomeServer.Models.IGnomeStats>(new GnomeStats(obj.Stats));
         this.Location = ko.observable<GnomeServer.Models.ILocation>(new Location(obj.Location));
-        this.BodyParts = ko.observableArray<GnomeServer.Models.IGnomeBodyPartStatus>(obj.BodyParts.map((item: GnomeBodyPartStatus) => { return new GnomeBodyPartStatus(item); }));
-        this.Skills = ko.observableArray<GnomeServer.Models.IGnomeSkill>(GnomeSkill.SortBySkill(obj.Skills.map((item: GnomeSkill) => { return new GnomeSkill(item); }), true));
+        this.BodyParts = ko.observableArray<models.IGnomeBodyPartStatus>(obj.BodyParts.map((item: models.jsonGnomeBodyPartStatus) => { return new GnomeBodyPartStatus(item); }));
+        this.LaborSkills = ko.observableArray<models.IGnomeSkill>(GnomeSkill.SortBySkill(obj.LaborSkills.map((item: models.jsonGnomeSkill) => { return new GnomeSkill(item); }), true));
+        this.CombatSkills = ko.observableArray<models.IGnomeSkill>(GnomeSkill.SortBySkill(obj.CombatSkills.map((item: models.jsonGnomeSkill) => { return new GnomeSkill(item); }), true));
         this.Profession = ko.observable(new GnomeProfession(obj.Profession));
     }
 }
@@ -72,7 +74,7 @@ export class GnomeStats implements models.IGnomeStats {
     Hunger: KnockoutObservable<number>;
     Thirst: KnockoutObservable<number>;
 
-    constructor(obj: any) {
+    constructor(obj: models.jsonGnomeStats) {
         this.Happiness = ko.observable(obj.Happiness);
         this.BloodLevel = ko.observable(obj.BloodLevel);
         this.Rest = ko.observable(obj.Rest);
@@ -93,7 +95,7 @@ export class Location implements models.ILocation {
         }
     });
     
-    constructor(obj: any) {
+    constructor(obj: models.jsonLocation) {
         this.X = ko.observable(obj.X);
         this.Y = ko.observable(obj.Y);
         this.Z = ko.observable(obj.Z);
@@ -112,7 +114,7 @@ export class GnomeBodyPartStatus implements models.IGnomeBodyPartStatus {
         deferEvaluation: true
     });
 
-    constructor(obj: any) {
+    constructor(obj: models.jsonGnomeBodyPartStatus) {
         this.BodyPart = ko.observable(obj.BodyPart);
         this.Statuses = ko.observableArray<string>(obj.Statuses);
     }
@@ -122,7 +124,7 @@ export class GnomeSkill implements models.IGnomeSkill {
     Name: KnockoutObservable<string>;
     Skill: KnockoutObservable<number>;
 
-    constructor(obj: any) {
+    constructor(obj: models.jsonGnomeSkill) {
         this.Name = ko.observable(obj.Name);
         this.Skill = ko.observable(obj.Skill);
     }

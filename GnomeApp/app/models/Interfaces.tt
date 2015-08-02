@@ -3,65 +3,86 @@
 <#@ assembly name="$(TargetDir)TypeLite.Net4.dll" #>
 <#@ assembly name="$(TargetDir)GnomeServer.dll" #>
 <#@ assembly name="$(TargetDir)$(TargetFileName)" #>
-
 <#@ import namespace="TypeLite" #> 
 <#@ import namespace="TypeLite.Extensions" #>
-<#@ import namespace="TypeLite.Net4" #><#@ import namespace="TypeLite.TsModels" #> 
+<#@ import namespace="TypeLite.Net4" #>
+<#@ import namespace="TypeLite.TsModels" #>
 <#@output extension=".d.ts"#>
-
 <#@include file="Manager.ttinclude"#>
-
 <# 
-	var manager = Manager.Create(Host, GenerationEnvironment);
-	var ts = TypeScript.Definitions().WithReference("Enums.ts").ForLoadedAssemblies(); 
-	ts = ts.WithTypeFormatter((type, f) => FormatType(type));
-	ts = ts.WithMemberTypeFormatter((type, f) => FormatMember(type));
+    Manager manager = Manager.Create(Host, GenerationEnvironment);
 
+    String prefixJson = "json";
+    String prefixInterface = "I";
+    
+    TypeScriptFluent ts = TypeScript.Definitions().WithReference("Enums.ts").ForLoadedAssemblies();
+    TypeScriptFluent kts = TypeScript.Definitions().ForLoadedAssemblies(); 
+    
+    // Use spaces instead of tabs, because I'm not a savage.
+    ts = ts.WithIndentation("    ");
+    kts = kts.WithIndentation("    ");
 
+    ts = ts.WithTypeFormatter((type, f) => FormatType(type, prefixJson));
+    kts = kts.WithTypeFormatter((type, f) => FormatType(type, prefixInterface));
+
+    ts = ts.WithMemberTypeFormatter((type, f) => FormatMember(type, prefixJson));
+    kts = kts.WithMemberTypeFormatter((type, f) => FormatMemberKnockout(type, prefixInterface));
 #>
 <#= ts.Generate(TsGeneratorOutput.Properties) #>
+<#= kts.Generate(TsGeneratorOutput.Properties) #>
 <# manager.StartNewFile("Enums.ts"); #>
-<#= ts.Generate(TsGeneratorOutput.Enums) #>
-<# manager.EndBlock(); #>
-<# manager.Process(true); #>
-
+<#= kts.Generate(TsGeneratorOutput.Enums) #>
+<# 
+    manager.EndBlock(); 
+    manager.Process(true);
+#>
 <#+
-
     private static Boolean IsCollection(TsType type)
     {
         return (type is TypeLite.TsModels.TsCollection);
     }
 
-	private static String FormatType(TsType type)
-	{
-		if (type is TypeLite.TsModels.TsClass)
-		{
-			return "I" + ((TypeLite.TsModels.TsClass) type).Name;    
-		}
+    private static String FormatType(TsType type, String typePrefix = "I")
+    {
+        if (type is TypeLite.TsModels.TsClass)
+        {
+            return String.Format("{0}{1}", typePrefix, ((TypeLite.TsModels.TsClass) type).Name);
+        }
 
-		if (type is TypeLite.TsModels.TsSystemType)
-		{
-			return ((TypeLite.TsModels.TsSystemType) type).Kind.ToTypeScriptString();
-		}
+        if (type is TypeLite.TsModels.TsSystemType)
+        {
+            return ((TypeLite.TsModels.TsSystemType) type).Kind.ToTypeScriptString();
+        }
 
-		if (type is TypeLite.TsModels.TsCollection)
-		{
-			var t = ((TypeLite.TsModels.TsCollection) type).ItemsType;
-			return FormatType(t);
-		}
-		return type.GetType().FullName;
-	}
+        if (type is TypeLite.TsModels.TsCollection)
+        {
+            var t = ((TypeLite.TsModels.TsCollection) type).ItemsType;
+            return FormatType(t, typePrefix);
+        }
+        return type.GetType().FullName;
+    }
 
-	private static String FormatMember(TsProperty type)
-	{
-	    if (IsCollection(type.PropertyType))
-	    {
-	        return String.Format("KnockoutObservableArray<{0}>", FormatType(type.PropertyType));
-	    }
-	    else
-	    {
-	        return String.Format("KnockoutObservable<{0}>", FormatType(type.PropertyType));
-	    }
-	}
+    private static String FormatMember(TsProperty type, String typePrefix)
+    {
+        if (IsCollection(type.PropertyType))
+        {
+            return String.Format("{0}[]", FormatType(type.PropertyType, typePrefix));
+        }
+        else
+        {
+            return String.Format("{0}", FormatType(type.PropertyType, typePrefix));
+        }
+    }
 
+    private static String FormatMemberKnockout(TsProperty type, String typePrefix)
+    {
+        if (IsCollection(type.PropertyType))
+        {
+            return String.Format("KnockoutObservableArray<{0}>", FormatType(type.PropertyType, typePrefix));
+        }
+        else
+        {
+            return String.Format("KnockoutObservable<{0}>", FormatType(type.PropertyType, typePrefix));
+        }
+    }
 #>

@@ -23,7 +23,7 @@ define(["require", "exports", 'knockout'], function (require, exports, ko) {
             this.ProfessionSkills = ko.pureComputed({
                 owner: this,
                 read: function () {
-                    var professionSkills = _this.Skills().filter(function (value) {
+                    var professionSkills = _this.LaborSkills().filter(function (value) {
                         return _this.Profession().Skills().indexOf(value.Name()) >= 0;
                     });
                     return GnomeSkill.SortBySkill(professionSkills, true);
@@ -34,7 +34,7 @@ define(["require", "exports", 'knockout'], function (require, exports, ko) {
             this.NonProfessionSkills = ko.pureComputed({
                 owner: this,
                 read: function () {
-                    var nonprofessionSkills = _this.Skills().filter(function (value) {
+                    var nonprofessionSkills = _this.LaborSkills().filter(function (value) {
                         return _this.Profession().Skills().indexOf(value.Name()) < 0;
                     });
                     return GnomeSkill.SortBySkill(nonprofessionSkills, true);
@@ -48,7 +48,10 @@ define(["require", "exports", 'knockout'], function (require, exports, ko) {
             this.BodyParts = ko.observableArray(obj.BodyParts.map(function (item) {
                 return new GnomeBodyPartStatus(item);
             }));
-            this.Skills = ko.observableArray(GnomeSkill.SortBySkill(obj.Skills.map(function (item) {
+            this.LaborSkills = ko.observableArray(GnomeSkill.SortBySkill(obj.LaborSkills.map(function (item) {
+                return new GnomeSkill(item);
+            }), true));
+            this.CombatSkills = ko.observableArray(GnomeSkill.SortBySkill(obj.CombatSkills.map(function (item) {
                 return new GnomeSkill(item);
             }), true));
             this.Profession = ko.observable(new GnomeProfession(obj.Profession));

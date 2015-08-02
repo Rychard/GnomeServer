@@ -13,7 +13,8 @@ namespace GnomeServer.Models
         public GnomeStats Stats { get; set; }
         public Location Location { get; set; }
         public GnomeBodyPartStatus[] BodyParts { get; set; }
-        public GnomeSkill[] Skills { get; set; }
+        public GnomeSkill[] CombatSkills { get; set; }
+        public GnomeSkill[] LaborSkills { get; set; }
         public GnomeProfession Profession { get; set; }
 
         public Gnome()
@@ -29,7 +30,8 @@ namespace GnomeServer.Models
             Stats = new GnomeStats(gnome);
             Profession = new GnomeProfession(gnome.Mind.Profession);
             BodyParts = GnomeBodyPartStatus.GetBodyStatus(gnome);
-            Skills = GnomeSkill.GetGnomeSkills(skillDefinitions, gnome);
+            LaborSkills = GnomeSkill.GetGnomeSkills(GnomeSkill.GnomeSkillType.Labor, skillDefinitions, gnome);
+            CombatSkills = GnomeSkill.GetGnomeSkills(GnomeSkill.GnomeSkillType.Combat, skillDefinitions, gnome);
         }
     }
 }
