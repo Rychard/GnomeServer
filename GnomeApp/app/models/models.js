@@ -44,7 +44,7 @@ define(["require", "exports", 'knockout'], function (require, exports, ko) {
             this.ID = ko.observable(obj.ID);
             this.Name = ko.observable(obj.Name);
             this.Stats = ko.observable(new GnomeStats(obj.Stats));
-            this.Location = ko.observable(new GnomeLocation(obj.Location));
+            this.Location = ko.observable(new Location(obj.Location));
             this.BodyParts = ko.observableArray(obj.BodyParts.map(function (item) {
                 return new GnomeBodyPartStatus(item);
             }));
@@ -67,8 +67,8 @@ define(["require", "exports", 'knockout'], function (require, exports, ko) {
         return GnomeStats;
     })();
     exports.GnomeStats = GnomeStats;
-    var GnomeLocation = (function () {
-        function GnomeLocation(obj) {
+    var Location = (function () {
+        function Location(obj) {
             var _this = this;
             this.Text = ko.pureComputed({
                 owner: this,
@@ -80,9 +80,9 @@ define(["require", "exports", 'knockout'], function (require, exports, ko) {
             this.Y = ko.observable(obj.Y);
             this.Z = ko.observable(obj.Z);
         }
-        return GnomeLocation;
+        return Location;
     })();
-    exports.GnomeLocation = GnomeLocation;
+    exports.Location = Location;
     var GnomeBodyPartStatus = (function () {
         function GnomeBodyPartStatus(obj) {
             var _this = this;

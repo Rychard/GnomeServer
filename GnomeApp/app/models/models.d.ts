@@ -1,14 +1,14 @@
 import models = GnomeServer.Models;
 export declare class GnomeSummary implements models.IGnomeSummary {
-    Population: KnockoutObservable<Number>;
+    Population: KnockoutObservable<number>;
     Gnomes: KnockoutObservableArray<GnomeServer.Models.IGnome>;
     constructor(obj: any);
 }
 export declare class Gnome implements models.IGnome {
-    ID: KnockoutObservable<Number>;
-    Name: KnockoutObservable<String>;
+    ID: KnockoutObservable<number>;
+    Name: KnockoutObservable<string>;
     Stats: KnockoutObservable<GnomeServer.Models.IGnomeStats>;
-    Location: KnockoutObservable<GnomeServer.Models.IGnomeLocation>;
+    Location: KnockoutObservable<GnomeServer.Models.ILocation>;
     BodyParts: KnockoutObservableArray<GnomeServer.Models.IGnomeBodyPartStatus>;
     Skills: KnockoutObservableArray<GnomeServer.Models.IGnomeSkill>;
     Profession: KnockoutObservable<GnomeServer.Models.IGnomeProfession>;
@@ -17,29 +17,29 @@ export declare class Gnome implements models.IGnome {
     constructor(obj: any);
 }
 export declare class GnomeStats implements models.IGnomeStats {
-    Happiness: KnockoutObservable<Number>;
-    BloodLevel: KnockoutObservable<Number>;
-    Rest: KnockoutObservable<Number>;
-    Hunger: KnockoutObservable<Number>;
-    Thirst: KnockoutObservable<Number>;
+    Happiness: KnockoutObservable<number>;
+    BloodLevel: KnockoutObservable<number>;
+    Rest: KnockoutObservable<number>;
+    Hunger: KnockoutObservable<number>;
+    Thirst: KnockoutObservable<number>;
     constructor(obj: any);
 }
-export declare class GnomeLocation implements models.IGnomeLocation {
-    X: KnockoutObservable<Number>;
-    Y: KnockoutObservable<Number>;
-    Z: KnockoutObservable<Number>;
-    Text: KnockoutComputed<String>;
+export declare class Location implements models.ILocation {
+    X: KnockoutObservable<number>;
+    Y: KnockoutObservable<number>;
+    Z: KnockoutObservable<number>;
+    Text: KnockoutComputed<string>;
     constructor(obj: any);
 }
 export declare class GnomeBodyPartStatus implements models.IGnomeBodyPartStatus {
-    BodyPart: KnockoutObservable<String>;
-    Statuses: KnockoutObservableArray<String>;
-    StatusText: KnockoutComputed<String>;
+    BodyPart: KnockoutObservable<string>;
+    Statuses: KnockoutObservableArray<string>;
+    StatusText: KnockoutComputed<string>;
     constructor(obj: any);
 }
 export declare class GnomeSkill implements models.IGnomeSkill {
-    Name: KnockoutObservable<String>;
-    Skill: KnockoutObservable<Number>;
+    Name: KnockoutObservable<string>;
+    Skill: KnockoutObservable<number>;
     constructor(obj: any);
     static SortBySkill(arr: models.IGnomeSkill[], descending: boolean): GnomeSkill[];
     private static CompareByskill(a, b);

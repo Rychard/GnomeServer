@@ -95,6 +95,7 @@
     <Compile Include="Models\Gnome\GnomeStats.cs" />
     <Compile Include="Models\General\Location.cs" />
     <Compile Include="Models\Military\GnomeSquad.cs" />
+    <Compile Include="Models\Job\Workshop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
