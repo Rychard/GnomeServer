@@ -3,7 +3,7 @@ using System.Net;
 
 namespace GnomeServer.ResponseFormatters
 {
-    public sealed class BlankResponseFormatter : IResponseFormatter
+    internal class BlankResponseFormatter : IResponseFormatter
     {
         private readonly HttpStatusCode _statusCode;
 

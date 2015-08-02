@@ -12,6 +12,7 @@ namespace GnomeServer.Models
 
         public GnomeSquad()
         {
+            // Empty constructor for serialization.
         }
 
         public GnomeSquad(Squad squad)
