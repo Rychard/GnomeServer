@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnomoriaInjection", "GnomoriaInjection\GnomoriaInjection.csproj", "{85701C49-4D50-4561-AB2C-222DF803F2E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnomeServer", "GnomeServer\GnomeServer.csproj", "{206E8579-8EC3-4355-89B5-299B47AD80D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FF8279DC-CE6F-47C0-9CE7-B940BE3BAFDE}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnomeApp", "GnomeApp\GnomeApp.csproj", "{B6B5545E-3621-49F3-98AB-770E2B77DAF5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+<<<<<<< HEAD
+		{85701C49-4D50-4561-AB2C-222DF803F2E4}.Debug|x86.ActiveCfg = Debug|x86
+		{85701C49-4D50-4561-AB2C-222DF803F2E4}.Debug|x86.Build.0 = Debug|x86
+		{85701C49-4D50-4561-AB2C-222DF803F2E4}.Release|x86.ActiveCfg = Release|x86
+		{85701C49-4D50-4561-AB2C-222DF803F2E4}.Release|x86.Build.0 = Release|x86
+		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Debug|x86.ActiveCfg = Debug|x86
+		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Debug|x86.Build.0 = Debug|x86
+		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Release|x86.ActiveCfg = Release|x86
+		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Release|x86.Build.0 = Release|x86
+=======
+		{85701C49-4D50-4561-AB2C-222DF803F2E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85701C49-4D50-4561-AB2C-222DF803F2E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85701C49-4D50-4561-AB2C-222DF803F2E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85701C49-4D50-4561-AB2C-222DF803F2E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6B5545E-3621-49F3-98AB-770E2B77DAF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6B5545E-3621-49F3-98AB-770E2B77DAF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6B5545E-3621-49F3-98AB-770E2B77DAF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6B5545E-3621-49F3-98AB-770E2B77DAF5}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> Create JavaScript SPA
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

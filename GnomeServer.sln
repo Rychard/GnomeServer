@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnomeApp", "GnomeApp\GnomeApp.csproj", "{B6B5545E-3621-49F3-98AB-770E2B77DAF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -27,6 +29,10 @@ Global
 		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Debug|x86.Build.0 = Debug|x86
 		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Release|x86.ActiveCfg = Release|x86
 		{206E8579-8EC3-4355-89B5-299B47AD80D8}.Release|x86.Build.0 = Release|x86
+		{B6B5545E-3621-49F3-98AB-770E2B77DAF5}.Debug|x86.ActiveCfg = Debug|x86
+		{B6B5545E-3621-49F3-98AB-770E2B77DAF5}.Debug|x86.Build.0 = Debug|x86
+		{B6B5545E-3621-49F3-98AB-770E2B77DAF5}.Release|x86.ActiveCfg = Release|x86
+		{B6B5545E-3621-49F3-98AB-770E2B77DAF5}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

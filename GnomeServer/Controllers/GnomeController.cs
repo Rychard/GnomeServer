@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game;
-using GameLibrary;
+using GnomeServer.Extensions;
 using GnomeServer.Models;
 using GnomeServer.Routing;
 
@@ -15,7 +15,7 @@ namespace GnomeServer.Controllers
         public IResponseFormatter Get()
         {
             // Before the player has started/loaded a game, some properties won't be populated.
-            var playerMembers = GnomanEmpire.Instance.World.AIDirector.PlayerFaction.Members;
+            var playerMembers = GnomanEmpire.Instance.GetGnomes();
             var skillDefinitions = GnomanEmpire.Instance.GameDefs.SkillDefs;
 
             List<Gnome> gnomes = new List<Gnome>();
@@ -62,7 +62,7 @@ namespace GnomeServer.Controllers
         [Route("Assign")]
         public IResponseFormatter Assign()
         {
-            var playerMembers = GnomanEmpire.Instance.World.AIDirector.PlayerFaction.Members;
+            var playerMembers = GnomanEmpire.Instance.GetGnomes();
             foreach (var playerMember in playerMembers)
             {
                 var gnome = playerMember.Value;

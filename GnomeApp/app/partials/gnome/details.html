@@ -1,0 +1,42 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <h1 class="panel-title">
+                <span data-bind="text: Name"></span>
+                <small><span data-bind="text: Profession().Name"></span></small>
+                <small><span class="text-right" data-bind="text: Location().Text()"></span></small>
+            </h1>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5><span data-bind="text: Profession().Name"></span> Skills</h5>
+                <div data-bind="foreach: ProfessionSkills">
+                    <div>
+                        <span data-bind="text: Name"></span>: <span data-bind="text: Skill"></span>
+                    </div>
+                </div>
+
+                <h5>Unused Skills</h5>
+                <div data-bind="foreach: NonProfessionSkills">
+                    <div>
+                        <span data-bind="text: Name"></span>: <span data-bind="text: Skill"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <h5>Health</h5>
+                </div>
+                <div class="row">
+                    <div data-bind="foreach: BodyParts">
+                        <div>
+                            <span data-bind="text: BodyPart"></span>: <span data-bind="text: StatusText"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+﻿<section>
+    <div class="row" style="margin: 15px 0;">
+        <div class="pull-left">
+            <button class="btn btn-default" data-bind="click: addGnome, enable: gameIsPaused">Add Gnome</button>
+            <button class="btn btn-default" data-bind="click: reassignProfessions, enable: gameIsPaused">Recalculate Professions</button>
+        </div>
+        <div class="pull-right">
+            <button class="btn btn-default" data-bind="click: refresh">Refresh</button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h1 class="panel-title">
+                        <span data-bind="text: name"></span>
+                        <span class="badge" data-bind="text: gnomeSummary().Population"></span>
+                    </h1>
+                </div>
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Gnome</th>
+                            <th>Profession</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ko foreach: gnomeSummary().Gnomes -->
+                        <tr data-bind="click: $root.selectGnome, css: { 'active-row': $root.selectedGnomeID() === $data.ID() }">
+                            <td>
+                                <span data-bind="text: Name"></span>
+                            </td>
+                            <td>
+                                <span class="text-muted" data-bind="text: Profession().Name"></span>
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-9" data-bind="if: selectedGnomeID() >= 0">
+            <!-- ko with: selectedGnome() -->
+            <div data-bind="compose: '../partials/gnome/details.html'"></div>
+            <!-- /ko -->
+        </div>
+    </div>
+</section>

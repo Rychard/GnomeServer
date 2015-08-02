@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using GnomeServer.Helpers;
 using GnomeServer.Routing;
 
@@ -27,7 +28,8 @@ namespace GnomeServer
                     remaining = remaining.Substring(1);
                 }
 
-                var matches = _methodRoutes.Where(methodRoute => methodRoute.Key.StartsWith(remaining));
+                String method = request.HttpMethod;
+                var matches = _methodRoutes.Where(methodRoute => methodRoute.Key.StartsWith(String.Format("{0}:{1}", method, remaining)));
                 if (matches.Any())
                 {
                     return true;
@@ -44,21 +46,22 @@ namespace GnomeServer
             var path = request.Url.AbsolutePath.Substring(1 + _classRoute.Length);
 
             // Even after the path, we remove the *next* leading slash (if exists), between the controller and the action.
-            if (path.StartsWith("/", StringComparison.OrdinalIgnoreCase))
+            if (path.StartsWith("/", StringComparison.InvariantCultureIgnoreCase))
             {
                 path = path.Substring(1);
             }
 
             String actionPath = path;
-            int queryStringOffset = actionPath.IndexOf("?", StringComparison.OrdinalIgnoreCase);
+            int queryStringOffset = actionPath.IndexOf("?", StringComparison.InvariantCultureIgnoreCase);
             if (queryStringOffset > 0)
             {
                 actionPath = actionPath.Substring(0, queryStringOffset);
             }
-            var match = _methodRoutes.Single(methodRoute => methodRoute.Key == actionPath);
+
+            var method = request.HttpMethod;
+            var match = _methodRoutes.Single(methodRoute => methodRoute.Key == String.Format("{0}:{1}", method, actionPath));
 
             var methodInfo = match.Value;
-
             var parameterInfos = methodInfo.GetParameters();
 
             // If there are no parameters, we simply won't pass any.
@@ -127,7 +130,7 @@ namespace GnomeServer
                 {
                     var className = type.Name;
                     const String suffixToRemove = "Controller";
-                    if (className.EndsWith(suffixToRemove, StringComparison.OrdinalIgnoreCase))
+                    if (className.EndsWith(suffixToRemove, StringComparison.InvariantCultureIgnoreCase))
                     {
                         className = className.Substring(0, className.Length - suffixToRemove.Length);
                     }
@@ -141,25 +144,38 @@ namespace GnomeServer
                 }
 
                 var methodRoutes = new Dictionary<String, MethodInfo>();
-                var methods = type.GetMethods(bindingFlags).Where(method => typeof(IResponseFormatter).IsAssignableFrom(method.ReturnType)).ToArray();
+
+                // Find all methods that return IResponseFormatter and were declared within the class (i.e. no overrides from the base class.)
+                var methods = type.GetMethods(bindingFlags).Where(method => typeof(IResponseFormatter).IsAssignableFrom(method.ReturnType) && method.DeclaringType == type).ToArray();
                 OnLogMessage(String.Format("Found {0} methods", methods.Length));
                 foreach (var methodInfo in methods)
                 {
-                    OnLogMessage("Checking: " + methodInfo.Name);
                     var methodRouteAttribute = methodInfo.GetCustomAttributes(typeof(RouteAttribute), true).Cast<RouteAttribute>().SingleOrDefault();
-                    
-                    String methodRoute;
+                    var methodMethodAttribute = methodInfo.GetCustomAttributes(typeof(IHttpMethodAttribute), true).Cast<IHttpMethodAttribute>().SingleOrDefault();
+
+                    StringBuilder methodRouteBuilder = new StringBuilder();
+
+                    if (methodMethodAttribute == null)
+                    {
+                        // When no method is explicitly set, assume GET.
+                        methodRouteBuilder.Append("GET:");
+                    }
+                    else
+                    {
+                        // Otherwise, use the method that was set.
+                        methodRouteBuilder.Append(String.Format("{0}:", methodMethodAttribute.Method));
+                    }
+
                     if (methodRouteAttribute == null)
                     {
-                        methodRoute = methodInfo.Name;
-                        
+                        methodRouteBuilder.Append(methodInfo.Name);
                     }
                     else
                     {
                         // TODO: Should probably sanitize these and throw exceptions if an invalid value is specified.
-                        methodRoute = methodRouteAttribute.Route;
+                        methodRouteBuilder.Append(methodRouteAttribute.Route);
                     }
-                    methodRoutes.Add(methodRoute, methodInfo);
+                    methodRoutes.Add(methodRouteBuilder.ToString(), methodInfo);
                 }
                 _methodRoutes = methodRoutes;
             }

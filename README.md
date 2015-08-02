@@ -35,7 +35,7 @@ To perform such a modification, there exists a library ([Mono.Cecil](https://git
 5. Download [LinqPad](http://www.linqpad.net/) and use it to run the `inject.linq` script located in the `Injector` directory.
     - It's likely that you'll need to edit the first path in that script to point to your `Gnomoria` installation path.
     - This script will create a file called `GnomoriaInjected.exe` in your `Gnomoria` installation path.
-    - At the time of writing, this is verified to work on the latest `in-dev` release from Steam, which is `v0.9.18 RC30`.
+    - At the time of writing, this is verified to work on the latest `in-dev` release from Steam, which is `v0.9.18 RC31`.
     - This *may* also work for the current `stable` version of the game on Steam (and perhaps the DRM-free version from Humble Bundle, which I also own, but haven't tested personally).
  
 6. Double-click the `GnomoriaInjected.exe` file in your `Gnomoria` installation directory to start the game.
@@ -76,6 +76,10 @@ Seeing as how the ASP.NET team has recently [open-sourced the code for this proj
 
 This project compiles into a single dll (`GnomoriaInjection.dll`) that acts as the receiving end of the hook.  At some point after the game's executable is launched, a call is made to the `getter` of the `GnomanEmpire.Instance` property.  This seems to be a reliable location to inject code into the game, though one must be careful to ensure that the code is not injected multiple times, as this property is accessed quite often throughout the normal execution of the game.
 
-## Questions?
+# Questions?
 
 Create an issue on this repository and I'll see what I can do to help.
+
+# Attribution
+
+The design of GnomeApp is based on the "Dream" template from [WebThemez](http://webthemez.com/free-bootstrap-admin-template-dream/)

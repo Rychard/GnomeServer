@@ -1,0 +1,13 @@
+﻿<div>
+    <div class="btn-group btn-group-sm pull-left" role="group">
+        <button type="button" class="btn btn-default" data-bind="click: speedDecrease"><span class="fa fa-backward"></span></button>
+        <button type="button" class="btn btn-default" data-bind="click: speedPlay, visible: speedCanPlay"><span class="fa fa-play"></span></button>
+        <button type="button" class="btn btn-default" data-bind="click: speedPause, visible: speedCanPause"><span class="fa fa-pause"></span></button>
+        <button type="button" class="btn btn-default" data-bind="click: speedIncrease"><span class="fa fa-forward"></span></button>
+    </div>
+
+    <div class="pull-right">
+        <span style="font-size: 20px"><span data-bind="text: speedText"></span>x</span>
+    </div>
+    <div class="clearfix"></div>    
+</div>

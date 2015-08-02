@@ -70,5 +70,13 @@ namespace GnomeServer
         {
             return new PlainTextResponseFormatter(content, statusCode);
         }
+
+        /// <summary>
+        /// Returns a blank response.
+        /// </summary>
+        protected IResponseFormatter BlankResponse(HttpStatusCode statusCode)
+        {
+            return new BlankResponseFormatter(statusCode);
+        }
     }
 }

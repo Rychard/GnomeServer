@@ -1,0 +1,143 @@
+﻿/*
+    Colors: 
+        Header Bar - #09192A
+        Page Background: #E5EBF2
+        Headings - #333
+        Menu Item Border: #1B2835
+        Menu Item: Active - #225081
+        Header Bar: Icons: #77C0FD
+*/
+
+body {
+    background-color: #09192A;
+}
+
+.page-host {
+    background-color: #E5EBF2;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 60px;
+    bottom: 0;
+    margin: 0 0 0 260px;
+    overflow: auto;
+}
+
+section {
+    margin: 0 20px;
+}
+
+.navbar-brand {
+    color: #FFF !important;
+    width: 260px;
+    text-align: left;
+    height: 60px;
+    font-size: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 30px;
+}
+
+.navbar-nav li.loader {
+    margin: 12px 20px 0 0;
+    visibility: hidden;
+    color: #FFF;
+}
+
+.navbar-nav li.loader i {
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.navbar-nav li.loader.active {
+    visibility: visible;
+}
+
+.loadingIndicator {
+    position: absolute; 
+    top: 0.1em; 
+    left: 0.1em; 
+    font: 0.8em Arial; 
+    background-color: #229; 
+    color: White; 
+    padding: 0.2em 0.5em 0.2em 0.5em; 
+    display: none;
+}
+
+.navbar-side {
+    z-index: 1;
+    top: 60px;
+    position: absolute;
+    width: 260px;
+}
+
+.sidebar-collapse > .nav > li {
+    border-bottom: 1px solid #6b6b6b;
+    border-bottom: 1px solid rgba(107, 107, 107, 0.2);
+}
+
+.sidebar-collapse > .nav > li:hover {
+    background-color: #3C6A9B!important;
+}
+
+.sidebar-collapse > .nav > li > a {
+    padding: 15px 10px;
+}
+
+.sidebar-collapse .nav > li > a {
+    color: #fff;
+    background: transparent;
+    text-shadow: none;
+}
+
+.sidebar-collapse .nav > li.staticText {
+    padding: 15px 10px;
+    color: #fff;
+    background: transparent;
+    text-shadow: none;
+}
+
+.sidebar-collapse .nav > li.staticText:hover {
+    background-color: transparent !important;
+}
+.active-menu {
+  background-color: #225081!important;
+}
+
+#main-menu > li > a > i {
+    margin-right: 10px;
+}
+
+table thead tr th {
+    background-color: #F7F7F7;
+}
+
+.active-row {
+    background-color: #fafad2;
+}
+
+.test {
+    color: #2c77ba;
+    color: #58B3F0;                
+    color: #C6E2EE;
+    color: #1F98C7;
+    color: #78C1DD;
+    color: #000000;
+    color: #111111;
+    color: #222222;
+    color: #252525;
+    color: #333333;
+    color: #555555;
+    color: #666666;
+    color: #777777;
+    color: #999999;
+    color: #AAAAAA;
+    color: #BBBBBB;
+    color: #CCCCCC;
+    color: #DDDDDD;
+    color: #E8E8E8;
+    color: #EEEEEE;
+    color: #F5F5F5;
+    color: #F9F9F9;
+    color: #FFFFFF;
+}
