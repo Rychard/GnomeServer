@@ -5,6 +5,7 @@
 <#@ assembly name="$(TargetDir)$(TargetFileName)" #>
 
 <#@ import namespace="TypeLite" #> 
+<#@ import namespace="TypeLite.Extensions" #>
 <#@ import namespace="TypeLite.Net4" #><#@ import namespace="TypeLite.TsModels" #> 
 <#@output extension=".d.ts"#>
 
@@ -40,7 +41,7 @@
 
 		if (type is TypeLite.TsModels.TsSystemType)
 		{
-			return ((TypeLite.TsModels.TsSystemType) type).Kind.ToString();
+			return ((TypeLite.TsModels.TsSystemType) type).Kind.ToTypeScriptString();
 		}
 
 		if (type is TypeLite.TsModels.TsCollection)
