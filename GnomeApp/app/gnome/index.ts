@@ -5,10 +5,9 @@ import $ = require('jquery');
 
 import models = require("../models/models");
 import GnomeSummary = models.GnomeSummary;
+import Utils = require("../utils");
 
 class Index {
-    endpointRoot = "http://localhost:8081/";
-
     name = "Gnomes";
     gameIsPaused: KnockoutObservable<Boolean> = ko.observable<Boolean>(true);
     gnomeSummary: KnockoutObservable<models.GnomeSummary> = ko.observable<models.GnomeSummary>();
@@ -33,14 +32,14 @@ class Index {
     });
 
     addGnome = () => {
-        var endpoint = this.endpointRoot + "Gnome/Add";
+        var endpoint = Utils.getRootUrl() + "Gnome/Add";
         $.get(endpoint).always(() => {
             this.loadData();
         });
     }
 
     reassignProfessions = () => {
-        var endpoint = this.endpointRoot + "Gnome/Assign";
+        var endpoint = Utils.getRootUrl() + "Gnome/Assign";
         $.get(endpoint).always(() => {
             this.loadData();
         });
@@ -56,8 +55,8 @@ class Index {
     
     loadData(): JQueryPromise<any> {
 
-        var endpoint = this.endpointRoot + "Gnome/";
-        var promise = $.getJSON(endpoint).then(data => {
+        var endpoint = Utils.getRootUrl() + "Gnome/";
+        var promise = $.getJSON(endpoint, (data) => {
             var obj = new GnomeSummary(data);
             this.gnomeSummary(obj);
             this.selectedGnomeID(-1);
@@ -67,6 +66,9 @@ class Index {
                 var gnomeID = gnome.ID();
                 this.selectedGnomeID(gnomeID);
             }
+        }).fail((data) => {
+            console.log(data);
+        }).then(data => {
             console.log("promise complete");
         });
 

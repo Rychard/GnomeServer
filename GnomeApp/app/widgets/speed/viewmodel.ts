@@ -65,7 +65,7 @@ class Speed {
     });
 
     getSpeed = () => {
-        var endpoint = this.endpointRoot + "Game/Speed";
+        var endpoint = Utils.getRootUrl() + "Game/Speed";
         $.get(endpoint, (data) => {
             this.speedCurrent(parseInt(data.Speed));
             this.speedIsPaused(data.IsPaused.toLowerCase() === "true");

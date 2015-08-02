@@ -4,10 +4,9 @@ import ko = require('knockout');
 import $ = require('jquery');
 
 import models = require("../models/models");
+import Utils = require("../utils");
 
 class Index {
-    endpointRoot = "http://localhost:8081/";
-
     name = "Military";
     gameIsPaused: KnockoutObservable<Boolean> = ko.observable<Boolean>(true);
     
@@ -17,7 +16,7 @@ class Index {
     
     loadData(): JQueryPromise<any> {
 
-        var endpoint = this.endpointRoot + "Military/";
+        var endpoint = Utils.getRootUrl() + "Military/";
         var promise = $.getJSON(endpoint).then(data => {
 
             // TODO
