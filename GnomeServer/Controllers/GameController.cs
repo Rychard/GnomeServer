@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using Game;
+using GnomeServer.Extensions;
 using GnomeServer.Routing;
 
 namespace GnomeServer.Controllers
@@ -11,6 +13,15 @@ namespace GnomeServer.Controllers
     [Route("Game")]
     public sealed class GameController : ConventionRoutingController
     {
+        [HttpGet]
+        [Route("State")]
+        public IResponseFormatter GetState()
+        {
+            GnomanEmpire.GameState gameState = GnomanEmpire.Instance.GameState();
+            var value = Enum.GetName(typeof (GnomanEmpire.GameState), gameState);
+            return JsonResponse(value);
+        }
+
         [HttpGet]
         [Route("Speed")]
         public IResponseFormatter GetSpeed()
