@@ -26,6 +26,7 @@
     <Content Include="app\military\index.html" />
     <Content Include="app\shell.html" />
     <Content Include="app\partials\gnome\details.html" />
+    <Content Include="app\test\index.html" />
     <Content Include="app\widgets\speed\view.html" />
     <Content Include="app\world\index.html" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -104,6 +105,7 @@
     <TypeScriptCompile Include="app\models\models.ts" />
     <TypeScriptCompile Include="app\shell.ts" />
     <TypeScriptCompile Include="app\startup.ts" />
+    <TypeScriptCompile Include="app\test\index.ts" />
     <TypeScriptCompile Include="app\utils.ts" />
     <TypeScriptCompile Include="app\widgets\speed\viewmodel.ts" />
     <TypeScriptCompile Include="app\world\index.ts" />
