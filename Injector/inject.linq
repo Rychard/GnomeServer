@@ -48,6 +48,12 @@ void Main()
     /// INJECTION CODE
     ///
 
+    // Ensure that a trailing slash is present on the path.  When omitted, append it.
+    if (!path.EndsWith(Path.DirectorySeparatorChar.ToString()))
+    {
+        path = path + Path.DirectorySeparatorChar;
+    }
+
     String pathGnomoria = Path.Combine(path, assemblyNameGnomoria);
     String pathInject = Path.Combine(path, assemblyNameInject);
 
