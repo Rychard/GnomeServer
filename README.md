@@ -14,6 +14,8 @@ To perform such a modification, there exists a library ([Mono.Cecil](https://git
 
 # Installation
 
+## Server
+
 1. Locate your `Gnomoria` installation directory.
     - Example: `C:\Program Files (x86)\Steam\SteamApps\Common\Gnomoria`
 
@@ -29,8 +31,10 @@ To perform such a modification, there exists a library ([Mono.Cecil](https://git
   - `GnomoriaInjection\bin\x86\Debug\GnomeServer.dll`
   - `GnomoriaInjection\bin\x86\Debug\GnomoriaInjection.dll`
   - `GnomoriaInjection\bin\x86\Debug\Newtonsoft.Json.dll`
-  - `GnomoriaInjection\bin\x86\Debug\GnomeServer.pdb`
-  - `GnomoriaInjection\bin\x86\Debug\GnomoriaInjection.pdb`
+  - `GnomoriaInjection\bin\x86\Debug\TypeLite.dll`
+  - `GnomoriaInjection\bin\x86\Debug\GnomeServer.pdb` (Optional)
+  - `GnomoriaInjection\bin\x86\Debug\GnomoriaInjection.pdb` (Optional)
+  
 
 5. Download [LinqPad](http://www.linqpad.net/) and use it to run the `inject.linq` script located in the `Injector` directory.
     - It's likely that you'll need to edit the first path in that script to point to your `Gnomoria` installation path.
@@ -39,6 +43,42 @@ To perform such a modification, there exists a library ([Mono.Cecil](https://git
     - This *may* also work for the current `stable` version of the game on Steam (and perhaps the DRM-free version from Humble Bundle, which I also own, but haven't tested personally).
  
 6. Double-click the `GnomoriaInjected.exe` file in your `Gnomoria` installation directory to start the game.
+
+## Website
+
+The server is designed to be flexible, so that *anyone* can build a website that will be hosted by the game.  The server will host anything in the following directory:
+
+    C:\Users\<username>\Documents\My Games\Gnomoria\wwwroot
+
+If any of the following conditions are met, accessing the server will display a "debug mode" page, which displays a list of controllers and their priorities:
+
+- The directory listed above does not exist.
+- The directory listed above is empty.
+- A request is made for the root-level directory (`/`), but an `index.html` file does not exist.
+  - This filename is not editable via the configuration file.
+  - Refer to the `IntegratedWebServer.ServiceRoot` method to modify this.
+
+This "feature" allows you to to verify that all request handlers (controllers) have been correctly registered with the server.
+
+In this repository, there exists a project named `GnomeApp`.  This is a website that I've put together during the development of the server.  If you wish to use this website, you'll need to build and deploy it independently of the server.  If you're developing your own website, these steps are not required.
+
+> **Note:** Building this project requires you to have [TypeScript 1.6](http://blogs.msdn.com/b/typescript/archive/2015/09/16/announcing-typescript-1-6.aspx).
+
+1. In the <kbd>Solution Explorer</kbd>, right click on the `GnomeApp\app\models\Interfaces.tt` file, and click <kbd>Run Custom Tool</kbd>.
+  - You *must* build the `GnomeServer` project prior to performing this step, as it uses the build artifacts from that project.
+  - Failure to perform this step will result in the following compiler warning:
+
+        ```text
+        A custom tool 'TextTemplatingFileGenerator' is associated with file 'app\models\Interfaces.tt', but the output of the custom tool was not found in the project.  You may try re-running the custom tool by right-clicking on the file in the Solution Explorer and choosing Run Custom Tool.
+        ```
+
+2. In the <kbd>Solution Explorer</kbd>, right click the on the `GnomeApp` project and select <kbd>Publish</kbd>.  
+2. Use the following options:
+  - Publish method: `File System`
+  - Target location: `C:\Users\<username>\Documents\My Games\Gnomoria\wwwroot`
+  - Configuration: `Release`
+
+3. Once this is done, ensure that the `C:\Users\<username>\Documents\My Games\Gnomoria\wwwroot` directory exists.
 
 ### Advanced Server Configuration
 By default, the game hosts a web server that listens for requests at [http://localhost:8081/](http://localhost:8081/)
@@ -74,7 +114,17 @@ Seeing as how the ASP.NET team has recently [open-sourced the code for this proj
 
 ## `GnomoriaInjection`
 
-This project compiles into a single dll (`GnomoriaInjection.dll`) that acts as the receiving end of the hook.  At some point after the game's executable is launched, a call is made to the `getter` of the `GnomanEmpire.Instance` property.  This seems to be a reliable location to inject code into the game, though one must be careful to ensure that the code is not injected multiple times, as this property is accessed quite often throughout the normal execution of the game.
+This project compiles into a single dll (`GnomoriaInjection.dll`) that acts as the receiving end of the hook.  At some point after the game's executable is launched, a call is made to the `getter` of the `GnomanEmpire.Instance` property.  This seems to be a reliable location to inject code into the game, though care must be taken to ensure that code is not injected multiple times, as this property is accessed quite frequently throughout the normal execution of the game.
+
+## `GnomeApp`
+
+The server *does* include a website by default, but the built-in site is extremely rudimentary and largely useless for anything other than development of the server itself.
+
+Because the utility of the server is largely dependent upon the existence of a website to host, this project exists to provide a working model of a website that exposes much of the functionality exposed by the server.
+
+This project is a JavaScript SPA (Single-Page Application), the bulk of which is written in [TypeScript](http://www.typescriptlang.org/).  This is subsequently transpiled into JavaScript, where it leverages a variety of JavaScript libraries, such as [Durandal](http://durandaljs.com/), [Knockout](http://knockoutjs.com/), [RequireJS](http://requirejs.org/), and [jQuery](https://jquery.com/).
+
+Also contained in this project are TypeScript interfaces that are generated dynamically from C# class definitions in the `GnomeServer` project.  This is accomplished through the very useful [TypeLite](http://type.litesolutions.net/) library.
 
 # Questions?
 
