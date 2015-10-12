@@ -2,7 +2,6 @@
 <#@ assembly name="$(TargetDir)TypeLite.dll" #>
 <#@ assembly name="$(TargetDir)TypeLite.Net4.dll" #>
 <#@ assembly name="$(TargetDir)GnomeServer.dll" #>
-<#@ assembly name="$(TargetDir)$(TargetFileName)" #>
 <#@ import namespace="TypeLite" #> 
 <#@ import namespace="TypeLite.Extensions" #>
 <#@ import namespace="TypeLite.Net4" #>
