@@ -25,7 +25,7 @@ To perform such a modification, there exists a library ([Mono.Cecil](https://git
     - `irrKlang.NET4.dll`
     - `SevenZipSharp.dll`
 
-4. Build the `GnomeServer` solution located in this repository.
+4. Build the `GnomeServer` solution located in this repository using [Visual Studio 2015](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx) (it's free).
 
 5. Copy the files below to your `Gnomoria` installation directory:
   - `GnomoriaInjection\bin\x86\Debug\GnomeServer.dll`
